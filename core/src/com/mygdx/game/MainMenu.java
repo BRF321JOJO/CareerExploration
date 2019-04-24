@@ -10,17 +10,18 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MainMenu implements Screen {
 
-    private final MyGdxGame game;
-    private OrthographicCamera camera;
+    static MyGdxGame game;
+    //private OrthographicCamera camera;
     //private Viewport viewport;
 
     private MenuHUD menuHUD;
 
     MainMenu(MyGdxGame game) {
         this.game = game;
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, MyGdxGame.getScreenWidth(), MyGdxGame.getScreenHeight());
-        //viewport = new ExtendViewport(MyGdxGame.getScreenWidth(), MyGdxGame.getScreenHeight(), camera);
+
+        //camera = new OrthographicCamera();
+        //camera.setToOrtho(false, MyGdxGame.getScreenWidth(), MyGdxGame.getScreenHeight());
+        //viewport = new ExtendViewport(MyGdxGame.SCREEN_WIDTH,MyGdxGame.SCREEN_HEIGHT, camera);
 
         menuHUD = new MenuHUD(game.batch);
     }
@@ -38,8 +39,8 @@ public class MainMenu implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
+//        camera.update();
+//        game.batch.setProjectionMatrix(camera.combined);
 
         //Renders HUD
         menuHUD.stage.draw();
@@ -53,7 +54,6 @@ public class MainMenu implements Screen {
     @Override
     public void resize(int width, int height) {
     }
-
 
 
     @Override
@@ -73,14 +73,7 @@ public class MainMenu implements Screen {
 
     }
 
-    public void update(){
-
+    private void update(){
         menuHUD.update();
-
-        //Changes Screen if screen touched
-        if (Gdx.input.isTouched()) {
-            game.setScreen(new GameScreen(game));
-            dispose();
-        }
     }
 }

@@ -5,22 +5,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MyGdxGame extends Game {
-    public SpriteBatch batch;
-    public BitmapFont font;
+    SpriteBatch batch;
 
-    private static final int SCREEN_WIDTH = 1920;
-    public static int getScreenWidth() {
-        return SCREEN_WIDTH;
-    }
-
-    private static final int SCREEN_HEIGHT	= 1080;
-    public static int getScreenHeight() {
-        return SCREEN_HEIGHT;
-    }
+    public static final int SCREEN_WIDTH = 1920;
+    public static final int SCREEN_HEIGHT	= 1080;
 
     public void create() {
         batch = new SpriteBatch();
-        font = new BitmapFont();
         this.setScreen(new MainMenu(this));
     }
 
@@ -30,7 +21,6 @@ public class MyGdxGame extends Game {
 
     public void dispose() {
         batch.dispose();
-        font.dispose();
     }
 }
 

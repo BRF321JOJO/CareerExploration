@@ -5,14 +5,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Entity {
 
-    public Texture texture;
-    public SpriteBatch batch;
-    public int posx;
-    public int posy;
-    public int width;
-    public int height;
-    public int velx;
-    public int vely;
+    Texture texture;
+    SpriteBatch batch;
+    int posx;
+    int posy;
+    int width;
+    int height;
+    int velx;
+    int vely;
 
     Entity(SpriteBatch batch, Texture texture, int posx, int posy, int width, int height, int velx, int vely){
         this.batch = batch;
@@ -25,18 +25,12 @@ public abstract class Entity {
         this.vely = vely;
     }
 
+    //This function returns true/false if collision is occuring
     public boolean isCollide (Entity e) {
-        if (
-                posx < e.posx + e.width     &&
-                        posx + width > e.posx       &&
-                        posy < e.posy + e.height    &&
-                        height + posy > e.posy
-        )
-        {
-            return true;
-        } else {
-            return false;
-        }
+        return  posx < e.posx + e.width &&
+                posx + width > e.posx &&
+                posy < e.posy + e.height    &&
+                height + posy > e.posy;
     }
 
     public abstract void render();

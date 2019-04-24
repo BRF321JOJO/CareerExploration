@@ -20,8 +20,8 @@ public class GameScreen implements Screen {
     GameScreen(MyGdxGame game) {
         this.game = game;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, MyGdxGame.getScreenWidth(), MyGdxGame.getScreenHeight());
-        //gamescreenviewport = new ExtendViewport(MyGdxGame.getScreenWidth(), MyGdxGame.getScreenHeight(), gamescreencamera);
+        //camera.setToOrtho(false, MyGdxGame.getScreenWidth(), MyGdxGame.getScreenHeight());
+        //viewport = new ExtendViewport(MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT, camera);
 
         character = new Character(game.batch);
     }
@@ -39,8 +39,8 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
+//        camera.update();
+//        game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
         character.render();

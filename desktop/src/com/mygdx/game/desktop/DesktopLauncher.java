@@ -12,8 +12,8 @@ public class DesktopLauncher {
 
 		//congif.addIcon("", Files.FilesType.Internal);
 		config.title = "Career Exploration";
-		config.width = MyGdxGame.getScreenWidth();
-		config.height = MyGdxGame.getScreenHeight();
+		config.width = MyGdxGame.SCREEN_WIDTH;
+		config.height = MyGdxGame.SCREEN_HEIGHT;
 		new LwjglApplication(new MyGdxGame(), config);
 	}
 }

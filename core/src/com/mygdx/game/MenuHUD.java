@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import sun.applet.Main;
 
 
 class MenuHUD {
@@ -16,15 +17,21 @@ class MenuHUD {
     private Viewport viewport;
 
     private Label StartGame;
-    //private Label Highscores;
+    private Label Highscores;
+
     private BitmapFont font = new BitmapFont();
 
 
     //Area of click ability
-    private int leftx = 500;
-    private int rightx = 700;
-    private int bottomy = 500;
-    private int topy = 700;
+    private int leftx = MyGdxGame.SCREEN_WIDTH/2-100;
+    private int rightx = MyGdxGame.SCREEN_WIDTH/2+100;
+    private int bottomy = MyGdxGame.SCREEN_HEIGHT/2+25;
+    private int topy = MyGdxGame.SCREEN_HEIGHT/2+150;
+
+    private int leftx2 = leftx;
+    private int rightx2 = rightx;
+    private int bottomy2 = bottomy-175;
+    private int topy2 = topy-175;
 
     MenuHUD(SpriteBatch batch) {
         viewport = new ScreenViewport(new OrthographicCamera());
@@ -34,27 +41,51 @@ class MenuHUD {
         displayTable.center();
         displayTable.setFillParent(true);
 
-        StartGame = new Label("", new Label.LabelStyle(font, Color.WHITE));
+        StartGame = new Label("Start Game", new Label.LabelStyle(font, Color.WHITE));
+        Highscores = new Label("High Scores", new Label.LabelStyle(font, Color.WHITE));
 
-        StartGame.setFontScale(1.3F);
+        StartGame.setFontScale(1.3f);
+        Highscores.setFontScale(1.3f);
 
-        displayTable.add(StartGame).expandX();
+        displayTable.add(StartGame);
+        //this line makes the following code appear on the next row
+        displayTable.row();
+        displayTable.add(Highscores).padTop(100);
 
         stage.addActor(displayTable);
+
     }
 
     void update() {
 
-        if(Gdx.input.getX() > leftx && Gdx.input.getX() < rightx) {
-            if(Gdx.input.getY() > bottomy && Gdx.input.getY() < topy) {
-                StartGame.setFontScale(2f);
+        //Information about getx/gety
+        //The click area is actually calculating from the top left of the screen
+        //To correct for this, I subtract the height from instances of .getY()
+
+        //Change size of start game when hover over it
+        if(Gdx.input.getX() >= leftx && Gdx.input.getX() <= rightx &&
+                MyGdxGame.SCREEN_HEIGHT - Gdx.input.getY() >= bottomy &&
+                MyGdxGame.SCREEN_HEIGHT - Gdx.input.getY() <= topy) {
+            StartGame.setFontScale(2f);
+
+            //This line of code makes it so that if you click in this area
+            // it will change to the next screen
+            if (Gdx.input.isTouched()) {
+                MainMenu.game.setScreen(new GameScreen(MainMenu.game));
             }
-        } else{
+
+        } else {
             StartGame.setFontScale(1.3f);
         }
 
-        updateStartGame("Start Game");
+        //Change size of highscores when hover over it
+        if(Gdx.input.getX() >= leftx2 && Gdx.input.getX() <= rightx2 &&
+                MyGdxGame.SCREEN_HEIGHT - Gdx.input.getY() >= bottomy2 &&
+                MyGdxGame.SCREEN_HEIGHT - Gdx.input.getY() <= topy2) {
+            Highscores.setFontScale(2f);
+        } else {
+            Highscores.setFontScale(1.3f);
+        }
     }
 
-    private void updateStartGame (String StartGameupdate) {StartGame.setText(StartGameupdate);}
 }
