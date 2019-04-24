@@ -9,9 +9,17 @@ public class TopRoom implements Screen {
 
     private Character character;
 
+    static int savedxpos;
+
     TopRoom (MyGdxGame game) {
         this.game = game;
-        character = new Character(game.batch, -5);
+        character = new Character(game.batch,
+                //GameScreen.character.posx,
+                GameScreen.savedxpos,
+                150,
+                5,
+                1
+        );
     }
 
     @Override
@@ -54,5 +62,10 @@ public class TopRoom implements Screen {
 
     private void update(){
         character.update();
+
+        if (character.posx >= 600 && character.posx <= 1000 && character.posy <= 0) {
+            savedxpos = character.posx;
+            TopRoom.game.setScreen(new GameScreen(TopRoom.game));
+        }
     }
 }

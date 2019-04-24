@@ -11,20 +11,35 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class GameScreen implements Screen {
 
     static MyGdxGame game;
-    private OrthographicCamera camera;
+    //private OrthographicCamera camera;
     //private Viewport viewport;
-
 
     private Character character;
 
+    static int savedxpos;
+
+
+    private int savedposx[];
+
+
+
     GameScreen(MyGdxGame game) {
         this.game = game;
-        camera = new OrthographicCamera();
+        //camera = new OrthographicCamera();
         //camera.setToOrtho(false, MyGdxGame.getScreenWidth(), MyGdxGame.getScreenHeight());
         //viewport = new ExtendViewport(MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT, camera);
 
-        character = new Character(game.batch, 5);
-    }
+        //This is a list of x and y positions I will save when the character moves back into the central room
+        savedposx[1] = 0;
+
+
+        character = new Character(game.batch,
+                    MyGdxGame.SCREEN_WIDTH / 2 - Character.characterwidth / 2,
+                    MyGdxGame.SCREEN_HEIGHT / 2 - Character.characterheight / 2,
+                    5,
+                    0
+            );
+        }
 
     @Override
     public void show() {
@@ -69,7 +84,23 @@ public class GameScreen implements Screen {
 
     }
 
+
     private void update(){
         character.update();
+
+        //Old method code
+//        if(inloadingZone(600,1000,MyGdxGame.SCREEN_HEIGHT-100,MyGdxGame.SCREEN_HEIGHT)) {
+//            savedxpos = character.posx;
+//            GameScreen.game.setScreen(new TopRoom(GameScreen.game));
+//        }
+
+        if (character.posx >= 600 && character.posx <= 1000 && character.posy >= MyGdxGame.SCREEN_HEIGHT-100) {
+            savedxpos = character.posx;
+            savedposx[1] = character.posx;
+            GameScreen.game.setScreen(new TopRoom(GameScreen.game));
+        }
+
+
+
     }
 }

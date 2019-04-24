@@ -13,8 +13,9 @@ public abstract class Entity {
     int height;
     int velx;
     int vely;
+    int ID;
 
-    Entity(SpriteBatch batch, Texture texture, int posx, int posy, int width, int height, int velx, int vely){
+    Entity(SpriteBatch batch, Texture texture, int posx, int posy, int width, int height, int velx, int vely, int ID){
         this.batch = batch;
         this.texture = texture;
         this.posx = posx;
@@ -23,6 +24,7 @@ public abstract class Entity {
         this.height = height;
         this.velx = velx;
         this.vely = vely;
+        this.ID = ID;
     }
 
     //This function returns true/false if collision is occuring

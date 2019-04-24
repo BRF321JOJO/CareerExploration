@@ -37,6 +37,10 @@ class MenuHUD {
     private int bottomy2 = bottomy-175;
     private int topy2 = topy-175;
 
+
+    //Saved positions for square when spawning in
+
+
     MenuHUD(SpriteBatch batch) {
         viewport = new ScreenViewport(new OrthographicCamera());
         stage = new Stage(viewport, batch);
@@ -85,6 +89,7 @@ class MenuHUD {
             // it will change to the next screen
             if (Gdx.input.isTouched()) {
                 MainMenu.game.setScreen(new GameScreen(MainMenu.game));
+
             }
 
         } else {

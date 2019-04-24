@@ -7,19 +7,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Character extends Entity{
 
-    static private int characterwidth = 75;
-    static private int characterheight = 75;
+    static int characterwidth = 75;
+    static int characterheight = 75;
 
-    Character(SpriteBatch batch, int vely) {
+    Character(SpriteBatch batch, int posx, int posy, int vely, int ID) {
         super(
                 batch,
                 new Texture("SquareGuy.png"),
-                MyGdxGame.SCREEN_WIDTH/2 - characterwidth/2,
-                MyGdxGame.SCREEN_HEIGHT/2 - characterheight/2,
+                posx,
+                posy,
                 characterwidth,
                 characterheight,
                 5,
-                vely
+                vely,
+                ID
         );
     }
 
@@ -37,12 +38,8 @@ public class Character extends Entity{
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
             posx += velx;
         }
-
-        if (posx >= 500 && posx <= 800 && posy >= MyGdxGame.SCREEN_HEIGHT-100) {
-            GameScreen.game.setScreen(new TopRoom(GameScreen.game));
-        }
-
     }
+
 
     public void render(){
         batch.draw(texture, posx, posy, width, height);
