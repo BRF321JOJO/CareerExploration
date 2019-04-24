@@ -1,42 +1,38 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class Character extends AbstractImage{
+public class Character extends Entity{
 
-    static private int characterwidth = 100;
-    static private int characterheight = 100;
-
-    Character (SpriteBatch batch) {
+    public Character(SpriteBatch batch) {
         super(
                 batch,
-                new Texture("SquareGuy.png"),
-                MyGdxGame.getScreenWidth()/2 - characterheight/2,
-                MyGdxGame.getScreenHeight()/2 - characterheight/2,
-                characterwidth,
-                characterheight,
-                1,
-                1
+                new Texture("badlogic.jpg"),
+                0,
+                0,
+                100,
+                100,
+                0,
+                0
         );
     }
 
-    void update(){
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            posy += vely;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            posx -= velx;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            posy -= vely;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            posy += velx;
-        }
+    public void update() {
+        
     }
 
-    void render() {batch.draw(texture, posx, posy, width, height);}
+    @Override
+    public void render(){
+        batch.draw(texture, posx, posy, width, height);
+    }
+
+    @Override
+    public void handleCollision(Entity e) {
+
+    }
 }

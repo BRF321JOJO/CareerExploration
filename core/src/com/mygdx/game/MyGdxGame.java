@@ -8,7 +8,6 @@ public class MyGdxGame extends Game {
     public SpriteBatch batch;
     public BitmapFont font;
 
-
     private static final int SCREEN_WIDTH = 1920;
     public static int getScreenWidth() {
         return SCREEN_WIDTH;

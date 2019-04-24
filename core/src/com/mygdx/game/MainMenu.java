@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -11,16 +12,22 @@ public class MainMenu implements Screen {
 
     private final MyGdxGame game;
     private OrthographicCamera camera;
-    private Viewport viewport;
+    //private Viewport viewport;
+
     private MenuHUD menuHUD;
 
     MainMenu(MyGdxGame game) {
         this.game = game;
         camera = new OrthographicCamera();
-        //camera.setToOrtho(false, 800, 480);
-        viewport = new ExtendViewport(MyGdxGame.getScreenWidth(), MyGdxGame.getScreenHeight(), camera);
+        camera.setToOrtho(false, MyGdxGame.getScreenWidth(), MyGdxGame.getScreenHeight());
+        //viewport = new ExtendViewport(MyGdxGame.getScreenWidth(), MyGdxGame.getScreenHeight(), camera);
 
         menuHUD = new MenuHUD(game.batch);
+    }
+
+    @Override
+    public void show() {
+        //starts when screen shows
     }
 
     @Override
@@ -37,7 +44,6 @@ public class MainMenu implements Screen {
         //Renders HUD
         menuHUD.stage.draw();
         game.batch.begin();
-
         //game.font.draw(game.batch, "Welcome to Drop!", 100, 150);
         //game.font.draw(game.batch, "Tap anywhere to begin!", 100, 100);
         game.batch.end();
@@ -48,10 +54,7 @@ public class MainMenu implements Screen {
     public void resize(int width, int height) {
     }
 
-    @Override
-    public void show() {
-        //starts when screen shows
-    }
+
 
     @Override
     public void hide() {
