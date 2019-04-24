@@ -30,7 +30,7 @@ public class GameScreen implements Screen {
         //viewport = new ExtendViewport(MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT, camera);
 
         //This is a list of x and y positions I will save when the character moves back into the central room
-        savedposx[1] = 0;
+        //savedposx[1] = 0;
 
 
         character = new Character(game.batch,
@@ -96,7 +96,7 @@ public class GameScreen implements Screen {
 
         if (character.posx >= 600 && character.posx <= 1000 && character.posy >= MyGdxGame.SCREEN_HEIGHT-100) {
             savedxpos = character.posx;
-            savedposx[1] = character.posx;
+            //savedposx[1] = character.posx;
             GameScreen.game.setScreen(new TopRoom(GameScreen.game));
         }
 

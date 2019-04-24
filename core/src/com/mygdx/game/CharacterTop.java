@@ -13,7 +13,8 @@ public class CharacterTop extends Entity{
                 0,
                 0,
                 5,
-                5
+                5,
+                1
         );
     }
 
