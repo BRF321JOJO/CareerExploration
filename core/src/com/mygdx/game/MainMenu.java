@@ -2,9 +2,10 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -16,6 +17,9 @@ public class MainMenu implements Screen {
 
     private MenuHUD menuHUD;
 
+    //Music code
+    private static Sound MenuMusic;
+
     MainMenu(MyGdxGame game) {
         this.game = game;
 
@@ -24,11 +28,14 @@ public class MainMenu implements Screen {
         //viewport = new ExtendViewport(MyGdxGame.SCREEN_WIDTH,MyGdxGame.SCREEN_HEIGHT, camera);
 
         menuHUD = new MenuHUD(game.batch);
+
+        MenuMusic = Gdx.audio.newSound(Gdx.files.internal("bossfight.mp3"));
     }
 
     @Override
     public void show() {
-        //starts when screen shows
+        //Insert music when game starts
+        MenuMusic.loop(0.4f);
     }
 
     @Override
@@ -45,8 +52,7 @@ public class MainMenu implements Screen {
         //Renders HUD
         menuHUD.stage.draw();
         game.batch.begin();
-        //game.font.draw(game.batch, "Welcome to Drop!", 100, 150);
-        //game.font.draw(game.batch, "Tap anywhere to begin!", 100, 100);
+        game.font.draw(game.batch, "Escape Room", MyGdxGame.SCREEN_WIDTH/2 - 350/2, MyGdxGame.SCREEN_HEIGHT-150);
         game.batch.end();
     }
 
@@ -54,7 +60,6 @@ public class MainMenu implements Screen {
     @Override
     public void resize(int width, int height) {
     }
-
 
     @Override
     public void hide() {
@@ -70,7 +75,6 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
-
     }
 
     private void update(){

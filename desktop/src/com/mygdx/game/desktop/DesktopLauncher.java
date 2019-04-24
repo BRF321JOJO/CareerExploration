@@ -11,7 +11,7 @@ public class DesktopLauncher {
 		config.resizable = true;
 
 		//congif.addIcon("", Files.FilesType.Internal);
-		config.title = "Career Exploration";
+		config.title = "Escape Room";
 		config.width = MyGdxGame.SCREEN_WIDTH;
 		config.height = MyGdxGame.SCREEN_HEIGHT;
 		new LwjglApplication(new MyGdxGame(), config);

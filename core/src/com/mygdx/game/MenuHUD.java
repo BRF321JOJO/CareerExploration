@@ -1,4 +1,5 @@
 package com.mygdx.game;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,6 +22,9 @@ class MenuHUD {
 
     private BitmapFont font = new BitmapFont();
 
+    Sound menunavigate0 = Gdx.audio.newSound(Gdx.files.internal("menunavigate0.wav"));
+    boolean playsoundonce = false;
+    boolean playhighscoresoundonce = false;
 
     //Area of click ability
     private int leftx = MyGdxGame.SCREEN_WIDTH/2-100;
@@ -66,7 +70,16 @@ class MenuHUD {
         if(Gdx.input.getX() >= leftx && Gdx.input.getX() <= rightx &&
                 MyGdxGame.SCREEN_HEIGHT - Gdx.input.getY() >= bottomy &&
                 MyGdxGame.SCREEN_HEIGHT - Gdx.input.getY() <= topy) {
+
+            //This increases the size of the text
             StartGame.setFontScale(2f);
+
+            //This plays a sound when it is hovered over
+            if (!playsoundonce) {
+                menunavigate0.play(0.5f);
+                playsoundonce = true;
+            }
+
 
             //This line of code makes it so that if you click in this area
             // it will change to the next screen
@@ -76,6 +89,7 @@ class MenuHUD {
 
         } else {
             StartGame.setFontScale(1.3f);
+            playsoundonce = false;
         }
 
         //Change size of highscores when hover over it
@@ -83,8 +97,14 @@ class MenuHUD {
                 MyGdxGame.SCREEN_HEIGHT - Gdx.input.getY() >= bottomy2 &&
                 MyGdxGame.SCREEN_HEIGHT - Gdx.input.getY() <= topy2) {
             Highscores.setFontScale(2f);
+
+            if(!playhighscoresoundonce) {
+                menunavigate0.play(0.5f);
+                playhighscoresoundonce = true;
+            }
         } else {
             Highscores.setFontScale(1.3f);
+            playhighscoresoundonce = false;
         }
     }
 

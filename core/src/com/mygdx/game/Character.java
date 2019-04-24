@@ -10,7 +10,7 @@ public class Character extends Entity{
     static private int characterwidth = 75;
     static private int characterheight = 75;
 
-    Character(SpriteBatch batch) {
+    Character(SpriteBatch batch, int vely) {
         super(
                 batch,
                 new Texture("SquareGuy.png"),
@@ -19,11 +19,12 @@ public class Character extends Entity{
                 characterwidth,
                 characterheight,
                 5,
-                5
+                vely
         );
     }
 
     void update() {
+
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
             posy += vely;
         }
@@ -36,6 +37,11 @@ public class Character extends Entity{
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
             posx += velx;
         }
+
+        if (posx >= 500 && posx <= 800 && posy >= MyGdxGame.SCREEN_HEIGHT-100) {
+            GameScreen.game.setScreen(new TopRoom(GameScreen.game));
+        }
+
     }
 
     public void render(){

@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class GameScreen implements Screen {
 
-    private final MyGdxGame game;
+    static MyGdxGame game;
     private OrthographicCamera camera;
     //private Viewport viewport;
 
@@ -23,7 +23,7 @@ public class GameScreen implements Screen {
         //camera.setToOrtho(false, MyGdxGame.getScreenWidth(), MyGdxGame.getScreenHeight());
         //viewport = new ExtendViewport(MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT, camera);
 
-        character = new Character(game.batch);
+        character = new Character(game.batch, 5);
     }
 
     @Override
