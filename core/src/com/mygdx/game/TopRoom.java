@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,14 +10,14 @@ public class TopRoom implements Screen {
 
     private Character character;
 
-    static int savedxpos;
-
     TopRoom (MyGdxGame game) {
         this.game = game;
         character = new Character(game.batch,
-                //GameScreen.character.posx,
-                GameScreen.savedxpos,
-                150,
+                GameScreen.savedposx,
+                100,
+                75,
+                75,
+                5,
                 5,
                 1
         );
@@ -63,9 +64,25 @@ public class TopRoom implements Screen {
     private void update(){
         character.update();
 
-        if (character.posx >= 600 && character.posx <= 1000 && character.posy <= 0) {
-            savedxpos = character.posx;
+        if (character.posx >= 600 && character.posx <= 1000 && character.posy <= 100) {
+            GameScreen.savedposx = character.posx;
+            GameScreen.savedposy = MyGdxGame.SCREEN_HEIGHT-100;
+            GameScreen.savedID = character.ID;
             TopRoom.game.setScreen(new GameScreen(TopRoom.game));
         }
+
+
+        for (Entity e : Entity.entities) {
+            //Checks collision for player specifically
+            if (character.isCollide(e)) {
+                //Says all handling denoted within respective class
+                character.handleCollision(e);
+                e.handleCollision(character);
+            }
+
+            //Can add more here
+
+        }
+
     }
 }

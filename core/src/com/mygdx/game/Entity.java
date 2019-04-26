@@ -3,6 +3,8 @@ package com.mygdx.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.ArrayList;
+
 public abstract class Entity {
 
     Texture texture;
@@ -14,6 +16,8 @@ public abstract class Entity {
     int velx;
     int vely;
     int ID;
+
+    public static ArrayList<Entity> entities = new ArrayList<Entity>();
 
     Entity(SpriteBatch batch, Texture texture, int posx, int posy, int width, int height, int velx, int vely, int ID){
         this.batch = batch;

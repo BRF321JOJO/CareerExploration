@@ -6,16 +6,18 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+//import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MainMenu implements Screen {
 
     static MyGdxGame game;
-    //private OrthographicCamera camera;
-    //private Viewport viewport;
+    private OrthographicCamera camera;
+    private Viewport viewport;
 
     private MenuHUD menuHUD;
+    private MenuBackground menuBackground;
 
     //Music code
     private static Sound MenuMusic;
@@ -23,11 +25,15 @@ public class MainMenu implements Screen {
     MainMenu(MyGdxGame game) {
         this.game = game;
 
-        //camera = new OrthographicCamera();
-        //camera.setToOrtho(false, MyGdxGame.getScreenWidth(), MyGdxGame.getScreenHeight());
-        //viewport = new ExtendViewport(MyGdxGame.SCREEN_WIDTH,MyGdxGame.SCREEN_HEIGHT, camera);
+        //Camera stuff supposedly makes it so that any quality render works
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT);
+
+        //Makes it so when the screen in resized, the screen won't be stretched but have black bars get fill the screen when possible
+        viewport = new FitViewport(MyGdxGame.SCREEN_WIDTH,MyGdxGame.SCREEN_HEIGHT, camera);
 
         menuHUD = new MenuHUD(game.batch);
+        menuBackground = new MenuBackground(game.batch);
 
         MenuMusic = Gdx.audio.newSound(Gdx.files.internal("bossfight.mp3"));
     }
@@ -46,19 +52,25 @@ public class MainMenu implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //Idk what this does still
 //        camera.update();
-//        game.batch.setProjectionMatrix(camera.combined);
+        //Supposedly makes it so that any quality screen works
+        game.batch.setProjectionMatrix(camera.combined);
 
-        //Renders HUD
-        menuHUD.stage.draw();
+
         game.batch.begin();
+        menuBackground.render();
         game.font.draw(game.batch, "Escape Room", MyGdxGame.SCREEN_WIDTH/2 - 350/2, MyGdxGame.SCREEN_HEIGHT-150);
         game.batch.end();
+        //Renders HUD
+        menuHUD.stage.draw();
     }
 
 
     @Override
     public void resize(int width, int height) {
+        //Updated the viewport according to the resizing
+        viewport.update(width, height);
     }
 
     @Override
@@ -79,5 +91,6 @@ public class MainMenu implements Screen {
 
     private void update(){
         menuHUD.update();
+        //menuBackground.update();
     }
 }

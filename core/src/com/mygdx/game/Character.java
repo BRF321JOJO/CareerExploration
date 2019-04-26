@@ -10,15 +10,15 @@ public class Character extends Entity{
     static int characterwidth = 75;
     static int characterheight = 75;
 
-    Character(SpriteBatch batch, int posx, int posy, int vely, int ID) {
+    Character(SpriteBatch batch, int posx, int posy, int width, int height, int velx, int vely, int ID) {
         super(
                 batch,
                 new Texture("SquareGuy.png"),
                 posx,
                 posy,
-                characterwidth,
-                characterheight,
-                5,
+                width,
+                height,
+                velx,
                 vely,
                 ID
         );
@@ -26,17 +26,20 @@ public class Character extends Entity{
 
     void update() {
 
-        if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            posy += vely;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-            posx -= velx;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-            posy -= vely;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            posx += velx;
+        //This only works if the player isn't in rightroom
+        if (ID != 2){
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                posy += vely;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                posx -= velx;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                posy -= vely;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                posx += velx;
+            }
         }
     }
 
@@ -48,4 +51,7 @@ public class Character extends Entity{
     public void handleCollision(Entity e) {
 
     }
+
+
+
 }
