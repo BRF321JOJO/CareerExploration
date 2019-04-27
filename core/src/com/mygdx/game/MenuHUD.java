@@ -22,9 +22,9 @@ class MenuHUD {
 
     private BitmapFont font = new BitmapFont();
 
-    Sound menunavigate0 = Gdx.audio.newSound(Gdx.files.internal("menunavigate0.wav"));
-    boolean playsoundonce = false;
-    boolean playhighscoresoundonce = false;
+    private Sound menunavigate0 = Gdx.audio.newSound(Gdx.files.internal("menunavigate0.wav"));
+    private boolean playsoundonce = false;
+    private boolean playhighscoresoundonce = false;
 
     //Area of click ability
     private int leftx = MyGdxGame.SCREEN_WIDTH/2-100;

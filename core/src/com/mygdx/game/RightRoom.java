@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -16,10 +17,12 @@ public class RightRoom implements Screen {
     private Character character;
     private Platform[] platform;
     private RightKey rightKey;
+    private RightRoomBackground rightRoomBackground;
 
     private boolean kaizoinvert = false;
     static int jumppresses;
 
+    Sound deathnote = Gdx.audio.newSound(Gdx.files.internal("Deathnote.wav"));
 
     RightRoom(MyGdxGame game) {
         this.game = game;
@@ -27,12 +30,14 @@ public class RightRoom implements Screen {
         camera.setToOrtho(kaizoinvert, MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT);
         viewport = new FitViewport(MyGdxGame.SCREEN_WIDTH,MyGdxGame.SCREEN_HEIGHT, camera);
 
+        rightRoomBackground = new RightRoomBackground(game.batch);
+
         character = new Character(game.batch, 100, 100, 25, 26, 4, 0, 2);
 
-        platform = new Platform[2];
+        platform = new Platform[3];
         platform[0] = new Platform(game.batch,0,50,250,50,0,0);
         platform[1] = new Platform(game.batch, 350,100,500,10,3,0);
-        //platform[2] = new Platform(game.batch, )
+        platform[2] = new Platform(game.batch, 750, 0, 20, 10, 0,0);
 
         //Makes the platforms entities
         for (int i = 0; i <= platform.length-1; i++) {
@@ -53,13 +58,14 @@ public class RightRoom implements Screen {
     public void render(float delta) {
         update();
 
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
 
+        rightRoomBackground.render();
         character.render();
         for (int i = 0; i <= platform.length-1; i++) {
             platform[i].render();
@@ -90,6 +96,8 @@ public class RightRoom implements Screen {
 
     @Override
     public void dispose() {
+        RightKey.gotkey.dispose();
+        deathnote.dispose();
     }
 
     //This method changes the value for a boolean which inverts the screen
@@ -109,10 +117,14 @@ public class RightRoom implements Screen {
         if(character.posy - character.height <= 0) {
             character.posy = 100;
             character.posx = 100;
+            deathnote.play(0.5f);
         }
+
+
+
     }
 
-    private void platformxmovement(int i, int rightbound, int leftbound) {
+    private void platformxmovement(int i, int leftbound, int rightbound) {
         if(platform[i].posx >= rightbound) {
             platform[i].velx= -platform[i].velx;
         } else if (platform[i].posx <= leftbound) {
@@ -123,6 +135,7 @@ public class RightRoom implements Screen {
     public void update() {
 
         //Update methods
+        //rightRoomBackground.update();
         character.update();
         for(int i = 0; i <= platform.length-1; i++) {
             platform[i].update();
@@ -134,7 +147,7 @@ public class RightRoom implements Screen {
         //Makes it so platform moves at speed of its velocity
         platform[1].posx += platform[1].velx;
         //Method which sets the bounds of movement
-        platformxmovement(1, 650, 250);
+        platformxmovement(1, 250, 650);
 
         //Makes it so that the character is affected by gravity
         character.posy += character.vely;
@@ -183,5 +196,11 @@ public class RightRoom implements Screen {
                 character.handleCollision(platform[i]);
             }
         }
+
+
+        if (character.isCollide(rightKey)) {
+            rightKey.handleCollision(character);
+        }
+
     }
 }
