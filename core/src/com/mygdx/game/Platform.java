@@ -28,7 +28,6 @@ public class Platform extends Entity{
     }
 
     public void handleCollision (Entity e){
-
     }
 
 }

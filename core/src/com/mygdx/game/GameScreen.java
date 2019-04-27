@@ -117,17 +117,17 @@ public class GameScreen implements Screen {
         }
 
 
-        for (Entity e : Entity.entities) {
-            //Checks collision for player specifically
-            if (character.isCollide(e)) {
-                //Says all handling denoted within respective class
-                character.handleCollision(e);
-                e.handleCollision(character);
-            }
-
-            //Can add more here
-
-        }
+//        for (Entity e : Entity.entities) {
+//            //Checks collision for player specifically
+//            if (character.isCollide(e)) {
+//                //Says all handling denoted within respective class
+//                character.handleCollision(e);
+//                e.handdleCollision(character);
+//            }
+//
+//            //Can add more here
+//
+//        }
 
     }
 }

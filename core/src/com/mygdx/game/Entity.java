@@ -32,7 +32,7 @@ public abstract class Entity {
     }
 
     //This function returns true/false if collision is occuring
-    public boolean isCollide (Entity e) {
+    boolean isCollide (Entity e) {
         return  posx < e.posx + e.width &&
                 posx + width > e.posx &&
                 posy < e.posy + e.height    &&

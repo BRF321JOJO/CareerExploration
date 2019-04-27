@@ -26,20 +26,20 @@ public class Character extends Entity{
 
     void update() {
 
-        //This only works if the player isn't in rightroom
-        if (ID != 2){
+        if (ID != 2) {
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
                 posy += vely;
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                posx -= velx;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
                 posy -= vely;
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                posx += velx;
-            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            posx -= velx;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            posx += velx;
         }
     }
 
@@ -49,7 +49,17 @@ public class Character extends Entity{
     }
 
     public void handleCollision(Entity e) {
+        //This makes it so that if the character is ever colliding with the platform
+        //it's velocity becomes 0 so it doesn't fall through or build up negative velocity
 
+        //Checking for collision happens after changing velocity
+        //Therefore, chen pressing W, it will see the velocity is 15, and therefore allow it to jump
+        //It will only apply this when the velocity decreases back down to 0
+        if(vely < 0) {
+            vely = 0;
+        }
+
+        RightRoom.jumppresses = 0;
     }
 
 
