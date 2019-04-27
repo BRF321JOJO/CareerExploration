@@ -15,7 +15,7 @@ public class DesktopLauncher {
 		config.resizable = true;
 
 		config.title = "Escape Room";
-		//config.addIcon(".jpg", Files.FileType.Internal);
+		config.addIcon("pixelkey.jpg", Files.FileType.Internal);
 		config.width = MyGdxGame.SCREEN_WIDTH;
 		config.height = MyGdxGame.SCREEN_HEIGHT;
 		new LwjglApplication(new MyGdxGame(), config);
