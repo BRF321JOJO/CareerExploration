@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -22,7 +23,9 @@ public class RightRoom implements Screen {
     private boolean kaizoinvert = false;
     static int jumppresses;
 
-    Sound deathnote = Gdx.audio.newSound(Gdx.files.internal("Deathnote.wav"));
+    private Sound deathnote = Gdx.audio.newSound(Gdx.files.internal("Deathnote.wav"));
+    private Sound jumpsound = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
+    static Music Clownfiesta = Gdx.audio.newMusic(Gdx.files.internal("Clownfiesta.wav"));
 
     RightRoom(MyGdxGame game) {
         this.game = game;
@@ -36,8 +39,8 @@ public class RightRoom implements Screen {
 
         platform = new Platform[3];
         platform[0] = new Platform(game.batch,0,50,250,50,0,0);
-        platform[1] = new Platform(game.batch, 350,100,500,10,3,0);
-        platform[2] = new Platform(game.batch, 750, 0, 20, 10, 0,0);
+        platform[1] = new Platform(game.batch, 350,100,300,10,3,0);
+        platform[2] = new Platform(game.batch, 1000, 10, 200, 10, 0,0);
 
         //Makes the platforms entities
         for (int i = 0; i <= platform.length-1; i++) {
@@ -45,18 +48,18 @@ public class RightRoom implements Screen {
         }
 
         rightKey = new RightKey(game.batch);
-
     }
 
     @Override
     public void show() {
-
+        Clownfiesta.play();
+        Clownfiesta.setVolume(0.5f);
     }
 
 
     @Override
     public void render(float delta) {
-        update();
+        update(delta);
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -70,7 +73,13 @@ public class RightRoom implements Screen {
         for (int i = 0; i <= platform.length-1; i++) {
             platform[i].render();
         }
-        rightKey.render();
+
+        //This makes it so that if the width is 0,
+        //it won't render anymore
+        //This is because collecting the key will make the width 0
+        if(rightKey.width>0) {
+            rightKey.render();
+        }
 
         game.batch.end();
 
@@ -84,6 +93,7 @@ public class RightRoom implements Screen {
 
     @Override
     public void hide() {
+        dispose();
     }
 
     @Override
@@ -98,6 +108,8 @@ public class RightRoom implements Screen {
     public void dispose() {
         RightKey.gotkey.dispose();
         deathnote.dispose();
+        Clownfiesta.dispose();
+        jumpsound.dispose();
     }
 
     //This method changes the value for a boolean which inverts the screen
@@ -114,59 +126,59 @@ public class RightRoom implements Screen {
     }
 
     private void resetplater() {
-        if(character.posy - character.height <= 0) {
+        if(character.posy + character.height <= 0) {
             character.posy = 100;
             character.posx = 100;
             deathnote.play(0.5f);
         }
-
-
-
     }
 
     private void platformxmovement(int i, int leftbound, int rightbound) {
-        if(platform[i].posx >= rightbound) {
+        if(platform[i].posx + platform[i].width >= rightbound) {
             platform[i].velx= -platform[i].velx;
         } else if (platform[i].posx <= leftbound) {
             platform[i].velx = -platform[i].velx;
         }
     }
 
-    public void update() {
+
+    public void update(float delta) {
 
         //Update methods
-        //rightRoomBackground.update();
         character.update();
         for(int i = 0; i <= platform.length-1; i++) {
             platform[i].update();
         }
-        rightKey.update();
+        rightKey.update(delta);
+
 
         //Class specific updates
 
         //Makes it so platform moves at speed of its velocity
         platform[1].posx += platform[1].velx;
         //Method which sets the bounds of movement
-        platformxmovement(1, 250, 650);
+        platformxmovement(1, 250, 1000);
 
         //Makes it so that the character is affected by gravity
         character.posy += character.vely;
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-
-            //Inverts screen when jump
-            kaizoupdatemethod();
-
             //Pressing W increases the velocity, which in turn increases the position
             jumppresses++;
             //This makes it so that a character can only jump a maximum of twice
             if(jumppresses == 1) {
                 character.vely = 15;
                 character.posy += character.vely;
+                jumpsound.play(0.5f);
+                //Inverts screen when jump
+                //Note: Only inverts when jump is valid
+                kaizoupdatemethod();
             }
             if(jumppresses == 2) {
                 character.vely = 15;
                 character.posy += character.vely;
+                jumpsound.play(0.5f);
+                kaizoupdatemethod();
             }
 
         } else {
@@ -174,8 +186,8 @@ public class RightRoom implements Screen {
             character.vely--;
         }
 
-        if (character.posy >= 50 && character.posy <= 100 && character.posx < 100) {
-            GameScreen.savedposx = MyGdxGame.SCREEN_WIDTH-character.posx;
+        if (character.posy >= 50 && character.posy <= 100 && character.posx < 50) {
+            GameScreen.savedposx = MyGdxGame.SCREEN_WIDTH-character.width-GameScreen.loadingzonewidth;
             GameScreen.savedposy = MyGdxGame.SCREEN_HEIGHT/2-character.height/2;
             GameScreen.savedID = character.ID;
             RightRoom.game.setScreen(new GameScreen(RightRoom.game));
@@ -196,7 +208,6 @@ public class RightRoom implements Screen {
                 character.handleCollision(platform[i]);
             }
         }
-
 
         if (character.isCollide(rightKey)) {
             rightKey.handleCollision(character);

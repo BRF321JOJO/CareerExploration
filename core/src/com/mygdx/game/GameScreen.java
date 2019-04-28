@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
@@ -15,7 +16,10 @@ public class GameScreen implements Screen {
     private Viewport viewport;
 
     private MainRoomBackground mainRoomBackground;
+    private Controlsimage controlsimage;
     private Character character;
+
+    private Music ambientMusic;
 
     //This starts at this point and is later dependent upon the saved position
     static int savedposx;
@@ -23,8 +27,10 @@ public class GameScreen implements Screen {
 
     static int savedID;
 
+    static int loadingzonewidth=100;
 
-    void checkposition () {
+
+    private void checkposition () {
         //This line of code makes it so that the game only sets this position when the game starts
         if(savedID == 0) {
             savedposx = MyGdxGame.SCREEN_WIDTH / 2 - Character.characterwidth / 2;
@@ -41,23 +47,18 @@ public class GameScreen implements Screen {
         viewport = new FitViewport(MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT, camera);
 
         mainRoomBackground = new MainRoomBackground(game.batch);
+        controlsimage = new Controlsimage(game.batch);
 
         checkposition();
 
-        character = new Character(game.batch,
-                    savedposx,
-                    savedposy,
-                    75,
-                    75,
-                    5,
-                    5,
-                    0
-            );
+        character = new Character(game.batch, savedposx, savedposy, 75, 75, 7, 7, 0);
+        ambientMusic = Gdx.audio.newMusic(Gdx.files.internal("bossfight.mp3"));
         }
 
     @Override
     public void show() {
-        //starts when screen shows
+        ambientMusic.play();
+        ambientMusic.setVolume(0.4f);
     }
 
     @Override
@@ -73,6 +74,7 @@ public class GameScreen implements Screen {
 
         game.batch.begin();
         mainRoomBackground.render();
+        controlsimage.render();
         character.render();
         game.batch.end();
 
@@ -85,6 +87,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
+        dispose();
     }
 
     @Override
@@ -97,21 +100,23 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        ambientMusic.dispose();
     }
 
     private void update(){
-        //mainRoomBackground.update();
-
         character.update();
 
-        if (character.posx >= 600 && character.posx <= 1000 && character.posy >= MyGdxGame.SCREEN_HEIGHT-100) {
-            savedposx = character.posx;
-            GameScreen.game.setScreen(new TopRoom(GameScreen.game));
+        //You will only be able to enter when you have obtained the key
+        if(RightKey.obtainedkey) {
+            if (character.posx >= MyGdxGame.SCREEN_WIDTH/2 - 50
+                    && character.posx <= MyGdxGame.SCREEN_WIDTH/2 + 50
+                    && character.posy >= MyGdxGame.SCREEN_HEIGHT - 100) {
+                savedposx = character.posx;
+                GameScreen.game.setScreen(new TopRoom(GameScreen.game));
+            }
         }
 
-
-        if (character.posy >= 600 && character.posy <= 1000 && character.posx >= MyGdxGame.SCREEN_WIDTH-100) {
+        if (character.posy >= MyGdxGame.SCREEN_HEIGHT/2 - 50 && character.posy <= MyGdxGame.SCREEN_HEIGHT/2 + 50 && character.posx >= MyGdxGame.SCREEN_WIDTH-loadingzonewidth) {
             savedposy = character.posy;
             GameScreen.game.setScreen(new RightRoom(GameScreen.game));
         }

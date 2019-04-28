@@ -2,11 +2,10 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-//import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -20,7 +19,7 @@ public class MainMenu implements Screen {
     private MenuBackground menuBackground;
 
     //Music code
-    private static Sound MenuMusic;
+    private static Music MenuMusic;
 
     MainMenu(MyGdxGame game) {
         this.game = game;
@@ -35,13 +34,14 @@ public class MainMenu implements Screen {
         menuHUD = new MenuHUD(game.batch);
         menuBackground = new MenuBackground(game.batch);
 
-        MenuMusic = Gdx.audio.newSound(Gdx.files.internal("bossfight.mp3"));
+        MenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Introduction.wav"));
     }
 
     @Override
     public void show() {
         //Insert music when game starts
-        MenuMusic.loop(0.4f);
+        MenuMusic.play();
+        MenuMusic.setVolume(0.4f);
     }
 
     @Override
@@ -75,6 +75,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void hide() {
+        dispose();
     }
 
     @Override
@@ -87,6 +88,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
+        MenuMusic.dispose();
     }
 
     private void update(){

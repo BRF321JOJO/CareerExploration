@@ -64,9 +64,12 @@ public class TopRoom implements Screen {
     private void update(){
         character.update();
 
-        if (character.posx >= 600 && character.posx <= 1000 && character.posy <= 100) {
+        //This is the loading zone for the top room
+        if (character.posx >= MyGdxGame.SCREEN_WIDTH/2 - 50
+                && character.posx <= MyGdxGame.SCREEN_WIDTH/2 + 50
+                && character.posy <= 100) {
             GameScreen.savedposx = character.posx;
-            GameScreen.savedposy = MyGdxGame.SCREEN_HEIGHT-100;
+            GameScreen.savedposy = MyGdxGame.SCREEN_HEIGHT - 100;
             GameScreen.savedID = character.ID;
             TopRoom.game.setScreen(new GameScreen(TopRoom.game));
         }
