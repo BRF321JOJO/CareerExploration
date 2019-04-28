@@ -13,7 +13,7 @@ public class RightKey extends Entity{
     private Vector2 origin;
     private Vector2 distance;
 
-    private static boolean playedonce;
+    static boolean obtainedonce;
     static boolean obtainedkey = false;
 
     private int songpausecounter;
@@ -64,9 +64,9 @@ public class RightKey extends Entity{
 
     public void handleCollision(Entity e) {
         //Plays sound if touch key, but only once
-        if (!playedonce) {
+        if (!obtainedonce) {
             gotkey.play(0.5f);
-            playedonce = true;
+            obtainedonce = true;
 
             //Pauses background music for a short time
             //*this will only occur once as well which is good

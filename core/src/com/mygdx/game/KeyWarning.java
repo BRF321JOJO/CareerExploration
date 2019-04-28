@@ -5,13 +5,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class KeyWarning extends AbstractImage{
 
+    static int constantwidth = 843;
+
     KeyWarning(SpriteBatch batch) {
         super(
                 batch,
                 new Texture("keywarningtrans.png"),
-                0,
-                0,
-                843,
+                MyGdxGame.SCREEN_WIDTH/2 - constantwidth/2,
+                MyGdxGame.SCREEN_HEIGHT - 250,
+                constantwidth,
                 63,
                 0,
                 0

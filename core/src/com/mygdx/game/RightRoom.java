@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -78,7 +79,9 @@ public class RightRoom implements Screen {
         //This makes it so that if the width is 0,
         //it won't render anymore
         //This is because collecting the key will make the width 0
-        if(rightKey.width>0) {
+
+        //Also, it will only render if you haven't obtained it yet, not if you reenter room
+        if(!RightKey.obtainedonce && rightKey.width>0) {
             rightKey.render();
         }
 
@@ -187,8 +190,11 @@ public class RightRoom implements Screen {
             character.vely--;
         }
 
+
         if (character.posy >= 50 && character.posy <= 100 && character.posx < 50) {
-            GameScreen.savedposx = MyGdxGame.SCREEN_WIDTH-character.width-GameScreen.torightroomloadingzonewidth;
+            //Subtract 50 so that they do not collide
+            //Idk why
+            GameScreen.savedposx = MyGdxGame.SCREEN_WIDTH - character.width - GameScreen.rightloadwidth-50;
             GameScreen.savedposy = MyGdxGame.SCREEN_HEIGHT/2-character.height/2;
             GameScreen.savedID = character.ID;
             RightRoom.game.setScreen(new GameScreen(RightRoom.game));

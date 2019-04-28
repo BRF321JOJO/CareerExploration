@@ -20,6 +20,8 @@ public class GameScreen implements Screen {
     private Character character;
     private KeyWarning keyWarning;
 
+    private LoadingZone[] loadingZone;
+
     private Music ambientMusic;
 
     //This starts at this point and is later dependent upon the saved position
@@ -28,8 +30,10 @@ public class GameScreen implements Screen {
 
     static int savedID;
 
-    static int torightroomloadingzonewidth=100;
-    static int totoproomloadingzoneheight=150;
+    static int rightloadwidth = 100;
+    static int rightloadheight = 300;
+    static int toploadheight = 100;
+    static int toploadwidth = 300;
 
     private boolean renderkey;
 
@@ -37,8 +41,9 @@ public class GameScreen implements Screen {
     private void checkposition () {
         //This line of code makes it so that the game only sets this position when the game starts
         if(savedID == 0) {
-            savedposx = MyGdxGame.SCREEN_WIDTH / 2 - Character.characterwidth / 2;
-            savedposy = MyGdxGame.SCREEN_HEIGHT / 2 - Character.characterheight / 2;
+            savedposx = MyGdxGame.SCREEN_WIDTH / 2 - Character.characterwidth / 2 ;
+            //Subtract 55 so that the character will be in the center of the controls area
+            savedposy = MyGdxGame.SCREEN_HEIGHT / 2 - Character.characterheight / 2 - 55;
         }
     }
 
@@ -51,6 +56,25 @@ public class GameScreen implements Screen {
         viewport = new FitViewport(MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT, camera);
 
         mainRoomBackground = new MainRoomBackground(game.batch);
+
+        loadingZone = new LoadingZone[2];
+
+        loadingZone[0] = new LoadingZone(game.batch ,
+                MyGdxGame.SCREEN_WIDTH - rightloadwidth,
+                MyGdxGame.SCREEN_HEIGHT/2 - rightloadheight/2,
+                rightloadwidth,
+                rightloadheight
+        );
+
+        //Idk why this code is different from above, but I just have to continue, time running out
+        //I would rather make this an entity
+        loadingZone[1] = new LoadingZone(game.batch,
+                MyGdxGame.SCREEN_WIDTH/2 - toploadwidth/2,
+                MyGdxGame.SCREEN_HEIGHT - toploadheight,
+                toploadwidth,
+                MyGdxGame.SCREEN_HEIGHT - toploadheight
+        );
+
         controlsimage = new Controlsimage(game.batch);
 
         checkposition();
@@ -83,9 +107,16 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
+
         mainRoomBackground.render();
+
+        for(int i=0; i<=loadingZone.length-1; i++) {
+            loadingZone[i].render();
+        }
+
         controlsimage.render();
         character.render();
+
         //Only renders if within area for rendering
         if(renderkey) {
             keyWarning.render();
@@ -118,15 +149,15 @@ public class GameScreen implements Screen {
     }
 
     boolean TopLoadingZone() {
-        return character.posx >= MyGdxGame.SCREEN_WIDTH/2 - 50
-                && character.posx <= MyGdxGame.SCREEN_WIDTH/2 + 50
-                && character.posy >= MyGdxGame.SCREEN_HEIGHT - totoproomloadingzoneheight;
+        return character.posx >= MyGdxGame.SCREEN_WIDTH/2 - character.width - toploadwidth/2
+                && character.posx <= MyGdxGame.SCREEN_WIDTH/2 + toploadwidth/2
+                && character.posy >= MyGdxGame.SCREEN_HEIGHT - character.height - toploadheight;
     }
 
     boolean RightLoadingZone(){
-        return character.posy >= MyGdxGame.SCREEN_HEIGHT/2 - 50
-                && character.posy <= MyGdxGame.SCREEN_HEIGHT/2 + 50
-                && character.posx >= MyGdxGame.SCREEN_WIDTH - torightroomloadingzonewidth;
+        return character.posy >= MyGdxGame.SCREEN_HEIGHT/2 - character.height - rightloadheight/2
+                && character.posy <= MyGdxGame.SCREEN_HEIGHT/2 + rightloadheight/2
+                && character.posx >= MyGdxGame.SCREEN_WIDTH - character.width - rightloadwidth;
     }
 
     private void update(){
@@ -139,8 +170,7 @@ public class GameScreen implements Screen {
                 savedposx = character.posx;
                 GameScreen.game.setScreen(new TopRoom(GameScreen.game));
             } else {
-                //This code runs if you didn't get the key
-                keyWarning.posx = MyGdxGame.SCREEN_WIDTH/2 - keyWarning.width/2;
+                //This code runs if you didn't get the key, renders the key warning
                 renderkey = true;
             }
         } else {
@@ -154,12 +184,42 @@ public class GameScreen implements Screen {
         }
 
 
+        //This keeps the player in bound
+        if(character.posx<0){
+            character.velx = 0;
+            character.posx = 0;
+        } else{
+            character.velx = 7;
+        }
+        if(character.posy<0) {
+            character.vely = 0;
+            character.posy = 0;
+        } else{
+            character.vely = 7;
+        }
+
+        if(character.posx > MyGdxGame.SCREEN_WIDTH - character.width){
+            character.velx = 0;
+            character.posx = MyGdxGame.SCREEN_WIDTH - character.width;
+        } else{
+            character.velx = 7;
+        }
+
+        if(character.posy > MyGdxGame.SCREEN_HEIGHT - character.height){
+            character.vely = 0;
+            character.posy = MyGdxGame.SCREEN_HEIGHT - character.height;
+        } else{
+            character.vely = 7;
+        }
+
+
+
 //        for (Entity e : Entity.entities) {
 //            //Checks collision for player specifically
 //            if (character.isCollide(e)) {
 //                //Says all handling denoted within respective class
 //                character.handleCollision(e);
-//                e.handdleCollision(character);
+//                e.handleCollision(character);
 //            }
 //
 //            //Can add more here

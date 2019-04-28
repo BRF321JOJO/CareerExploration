@@ -3,11 +3,12 @@ package com.mygdx.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Table extends Entity {
+public class LoadingZone extends Entity {
 
-    Table(SpriteBatch batch, int posx, int posy, int width, int height){
-        super(batch,
-                new Texture("White.png"),
+    LoadingZone(SpriteBatch batch, int posx, int posy, int width, int height){
+        super(
+                batch,
+                new Texture("Black.png"),
                 posx,
                 posy,
                 width,
