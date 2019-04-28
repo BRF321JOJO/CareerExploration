@@ -18,6 +18,7 @@ public class GameScreen implements Screen {
     private MainRoomBackground mainRoomBackground;
     private Controlsimage controlsimage;
     private Character character;
+    private KeyWarning keyWarning;
 
     private Music ambientMusic;
 
@@ -27,7 +28,10 @@ public class GameScreen implements Screen {
 
     static int savedID;
 
-    static int loadingzonewidth=100;
+    static int torightroomloadingzonewidth=100;
+    static int totoproomloadingzoneheight = 150;
+
+    private boolean renderkey;
 
 
     private void checkposition () {
@@ -52,12 +56,18 @@ public class GameScreen implements Screen {
         checkposition();
 
         character = new Character(game.batch, savedposx, savedposy, 75, 75, 7, 7, 0);
+
+
+        keyWarning = new KeyWarning(game.batch);
+
+
         ambientMusic = Gdx.audio.newMusic(Gdx.files.internal("bossfight.mp3"));
         }
 
     @Override
     public void show() {
         ambientMusic.play();
+        ambientMusic.setLooping(true);
         ambientMusic.setVolume(0.4f);
     }
 
@@ -76,6 +86,10 @@ public class GameScreen implements Screen {
         mainRoomBackground.render();
         controlsimage.render();
         character.render();
+        //Only renders if within area for rendering
+        if(renderkey) {
+            keyWarning.render();
+        }
         game.batch.end();
 
     }
@@ -103,20 +117,38 @@ public class GameScreen implements Screen {
         ambientMusic.dispose();
     }
 
+    boolean TopLoadingZone() {
+        return character.posx >= MyGdxGame.SCREEN_WIDTH/2 - 50
+                && character.posx <= MyGdxGame.SCREEN_WIDTH/2 + 50
+                && character.posy >= MyGdxGame.SCREEN_HEIGHT - totoproomloadingzoneheight;
+    }
+
+    boolean RightLoadingZone(){
+        return character.posy >= MyGdxGame.SCREEN_HEIGHT/2 - 50
+                && character.posy <= MyGdxGame.SCREEN_HEIGHT/2 + 50
+                && character.posx >= MyGdxGame.SCREEN_WIDTH-torightroomloadingzonewidth;
+    }
+
     private void update(){
         character.update();
+        keyWarning.update();
 
         //You will only be able to enter when you have obtained the key
-        if(RightKey.obtainedkey) {
-            if (character.posx >= MyGdxGame.SCREEN_WIDTH/2 - 50
-                    && character.posx <= MyGdxGame.SCREEN_WIDTH/2 + 50
-                    && character.posy >= MyGdxGame.SCREEN_HEIGHT - 100) {
+        if(TopLoadingZone()){
+            if(RightKey.obtainedkey) {
                 savedposx = character.posx;
                 GameScreen.game.setScreen(new TopRoom(GameScreen.game));
+            } else {
+                //This code runs if you didn't get the key
+                keyWarning.posx = MyGdxGame.SCREEN_WIDTH/2 - keyWarning.width/2;
+                renderkey = true;
             }
+        } else {
+            renderkey=false;
         }
 
-        if (character.posy >= MyGdxGame.SCREEN_HEIGHT/2 - 50 && character.posy <= MyGdxGame.SCREEN_HEIGHT/2 + 50 && character.posx >= MyGdxGame.SCREEN_WIDTH-loadingzonewidth) {
+
+        if (RightLoadingZone()) {
             savedposy = character.posy;
             GameScreen.game.setScreen(new RightRoom(GameScreen.game));
         }

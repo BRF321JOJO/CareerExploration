@@ -41,6 +41,7 @@ public class MainMenu implements Screen {
     public void show() {
         //Insert music when game starts
         MenuMusic.play();
+        MenuMusic.setLooping(true);
         MenuMusic.setVolume(0.4f);
     }
 

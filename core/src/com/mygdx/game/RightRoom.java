@@ -53,6 +53,7 @@ public class RightRoom implements Screen {
     @Override
     public void show() {
         Clownfiesta.play();
+        Clownfiesta.setLooping(true);
         Clownfiesta.setVolume(0.5f);
     }
 
@@ -187,7 +188,7 @@ public class RightRoom implements Screen {
         }
 
         if (character.posy >= 50 && character.posy <= 100 && character.posx < 50) {
-            GameScreen.savedposx = MyGdxGame.SCREEN_WIDTH-character.width-GameScreen.loadingzonewidth;
+            GameScreen.savedposx = MyGdxGame.SCREEN_WIDTH-character.width-GameScreen.torightroomloadingzonewidth;
             GameScreen.savedposy = MyGdxGame.SCREEN_HEIGHT/2-character.height/2;
             GameScreen.savedID = character.ID;
             RightRoom.game.setScreen(new GameScreen(RightRoom.game));
