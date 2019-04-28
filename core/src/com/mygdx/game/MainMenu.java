@@ -60,8 +60,8 @@ public class MainMenu implements Screen {
 
 
         game.batch.begin();
-        menuBackground.render();
-        game.font.draw(game.batch, "Escape Room", MyGdxGame.SCREEN_WIDTH/2 - 350/2, MyGdxGame.SCREEN_HEIGHT-150);
+        //menuBackground.render();
+        game.font.draw(game.batch, "Escape Room", MyGdxGame.SCREEN_WIDTH/2 - 350/2, MyGdxGame.SCREEN_HEIGHT-250);
         game.batch.end();
         //Renders HUD
         menuHUD.stage.draw();

@@ -7,7 +7,7 @@ public class MainRoomBackground extends AbstractImage {
     MainRoomBackground(SpriteBatch batch){
         super(
                 batch,
-                new Texture("Enemey.png"),
+                new Texture("Rug.png"),
                 0,
                 0,
                 MyGdxGame.SCREEN_WIDTH,

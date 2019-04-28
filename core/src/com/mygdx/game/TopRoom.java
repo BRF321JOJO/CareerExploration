@@ -10,11 +10,14 @@ public class TopRoom implements Screen {
     static MyGdxGame game;
 
     private Character character;
+    private Boss boss;
+    private TopRoomBackground topRoomBackground;
 
     private Music backgroundmusic = Gdx.audio.newMusic(Gdx.files.internal("Ashtonsong3.wav"));
 
     TopRoom (MyGdxGame game) {
         this.game = game;
+        topRoomBackground = new TopRoomBackground(game.batch);
         character = new Character(game.batch,
                 GameScreen.savedposx,
                 150,
@@ -24,6 +27,7 @@ public class TopRoom implements Screen {
                 5,
                 1
         );
+        boss = new Boss(game.batch);
     }
 
     @Override
@@ -41,7 +45,9 @@ public class TopRoom implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
+        topRoomBackground.render();
         character.render();
+        boss.render();
         game.batch.end();
     }
 
@@ -74,7 +80,9 @@ public class TopRoom implements Screen {
 //    }
 
     private void update(){
+        topRoomBackground.update();
         character.update();
+        boss.update();
 
         //This is the loading zone for the top room
 //        if (CentralLoadingZone()) {

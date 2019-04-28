@@ -38,6 +38,9 @@ class MenuHUD {
     private int topy2 = topy-175;
 
 
+    private float labelstartingsize = 1.7f;
+    private float labelincreasedsize = 2.5f;
+
     //Saved positions for square when spawning in
 
 
@@ -52,8 +55,8 @@ class MenuHUD {
         StartGame = new Label("Start Game", new Label.LabelStyle(font, Color.WHITE));
         Highscores = new Label("High Scores", new Label.LabelStyle(font, Color.WHITE));
 
-        StartGame.setFontScale(1.3f);
-        Highscores.setFontScale(1.3f);
+        StartGame.setFontScale(labelstartingsize);
+        Highscores.setFontScale(labelstartingsize);
 
         displayTable.add(StartGame);
         //this line makes the following code appear on the next row
@@ -76,7 +79,7 @@ class MenuHUD {
                 MyGdxGame.SCREEN_HEIGHT - Gdx.input.getY() <= topy) {
 
             //This increases the size of the text
-            StartGame.setFontScale(2f);
+            StartGame.setFontScale(labelincreasedsize);
 
             //This plays a sound when it is hovered over
             if (!playsoundonce) {
@@ -93,7 +96,7 @@ class MenuHUD {
             }
 
         } else {
-            StartGame.setFontScale(1.3f);
+            StartGame.setFontScale(labelstartingsize);
             playsoundonce = false;
         }
 
@@ -101,14 +104,14 @@ class MenuHUD {
         if(Gdx.input.getX() >= leftx2 && Gdx.input.getX() <= rightx2 &&
                 MyGdxGame.SCREEN_HEIGHT - Gdx.input.getY() >= bottomy2 &&
                 MyGdxGame.SCREEN_HEIGHT - Gdx.input.getY() <= topy2) {
-            Highscores.setFontScale(2f);
+            Highscores.setFontScale(labelincreasedsize);
 
             if(!playhighscoresoundonce) {
                 menunavigate0.play(0.5f);
                 playhighscoresoundonce = true;
             }
         } else {
-            Highscores.setFontScale(1.3f);
+            Highscores.setFontScale(labelstartingsize);
             playhighscoresoundonce = false;
         }
     }
