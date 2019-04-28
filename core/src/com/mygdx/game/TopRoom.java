@@ -17,7 +17,7 @@ public class TopRoom implements Screen {
         this.game = game;
         character = new Character(game.batch,
                 GameScreen.savedposx,
-                100,
+                150,
                 75,
                 75,
                 5,
@@ -67,22 +67,22 @@ public class TopRoom implements Screen {
         backgroundmusic.dispose();
     }
 
-    boolean CentralLoadingZone(){
-        return character.posx >= MyGdxGame.SCREEN_WIDTH/2 - 50
-                && character.posx <= MyGdxGame.SCREEN_WIDTH/2 + 50
-                && character.posy <= GameScreen.totoproomloadingzoneheight;
-    }
+//    boolean CentralLoadingZone(){
+//        return character.posx >= MyGdxGame.SCREEN_WIDTH/2 - 50
+//                && character.posx <= MyGdxGame.SCREEN_WIDTH/2 + 50
+//                && character.posy <= GameScreen.totoproomloadingzoneheight;
+//    }
 
     private void update(){
         character.update();
 
         //This is the loading zone for the top room
-        if (CentralLoadingZone()) {
-            GameScreen.savedposx = character.posx;
-            GameScreen.savedposy = MyGdxGame.SCREEN_HEIGHT - 100;
-            GameScreen.savedID = character.ID;
-            TopRoom.game.setScreen(new GameScreen(TopRoom.game));
-        }
+//        if (CentralLoadingZone()) {
+//            GameScreen.savedposx = character.posx;
+//            GameScreen.savedposy = MyGdxGame.SCREEN_HEIGHT - 100;
+//            GameScreen.savedID = character.ID;
+//            TopRoom.game.setScreen(new GameScreen(TopRoom.game));
+//        }
 
 
         for (Entity e : Entity.entities) {

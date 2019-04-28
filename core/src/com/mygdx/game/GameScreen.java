@@ -29,7 +29,7 @@ public class GameScreen implements Screen {
     static int savedID;
 
     static int torightroomloadingzonewidth=100;
-    static int totoproomloadingzoneheight = 150;
+    static int totoproomloadingzoneheight=150;
 
     private boolean renderkey;
 
@@ -126,7 +126,7 @@ public class GameScreen implements Screen {
     boolean RightLoadingZone(){
         return character.posy >= MyGdxGame.SCREEN_HEIGHT/2 - 50
                 && character.posy <= MyGdxGame.SCREEN_HEIGHT/2 + 50
-                && character.posx >= MyGdxGame.SCREEN_WIDTH-torightroomloadingzonewidth;
+                && character.posx >= MyGdxGame.SCREEN_WIDTH - torightroomloadingzonewidth;
     }
 
     private void update(){
