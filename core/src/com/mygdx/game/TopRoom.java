@@ -15,6 +15,7 @@ public class TopRoom implements Screen {
     private TopRoomBackground topRoomBackground;
     private SpacetoShoot spacetoShoot;
     private Laser laser;
+    private WinGame winGame;
 
     private Music backgroundmusic = Gdx.audio.newMusic(Gdx.files.internal("Ashtonsong3.wav"));
 
@@ -24,6 +25,7 @@ public class TopRoom implements Screen {
     private Sound shootlaser = Gdx.audio.newSound(Gdx.files.internal("Shootlaser.wav"));
 
     static boolean renderlaser = false;
+    //Currently bosshealth doesn't control anything
     private int characterhealth = 10;
     private int bosshealth = 20;
 
@@ -35,6 +37,10 @@ public class TopRoom implements Screen {
     private Sound characterdeath = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
     private Sound bossdeath = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
     private boolean bossdeathplayonce;
+    private boolean characterdeathplayonce;
+    private Music wingamemusic = Gdx.audio.newMusic(Gdx.files.internal("happymusic.wav"));
+
+    private boolean wongame = false;
 
 
     TopRoom (MyGdxGame game) {
@@ -52,13 +58,14 @@ public class TopRoom implements Screen {
         );
         boss = new Boss(game.batch);
         spacetoShoot = new SpacetoShoot(game.batch);
+        winGame = new WinGame(game.batch);
     }
 
     @Override
     public void show() {
         backgroundmusic.play();
         backgroundmusic.setLooping(true);
-        backgroundmusic.setVolume(0.4f);
+        backgroundmusic.setVolume(0.6f);
     }
 
     @Override
@@ -76,10 +83,17 @@ public class TopRoom implements Screen {
             laser.render();
         }
         character.render();
-        boss.render();
+        //Only renders boss if the width actually exists
+        if(boss.width>0) {
+            boss.render();
+        }
 
         if (renderspacetoshoot) {
             spacetoShoot.render();
+        }
+
+        if(wongame) {
+            winGame.render();
         }
 
         game.batch.end();
@@ -110,6 +124,7 @@ public class TopRoom implements Screen {
         characterhurt.dispose();
         characterdeath.dispose();
         bossdeath.dispose();
+        wingamemusic.dispose();
     }
 
     private void update(){
@@ -130,11 +145,11 @@ public class TopRoom implements Screen {
 
             //Only runs when the laser is off screen, meaning can only shoot one laser at a time
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !renderlaser){
-                shootlaser.play(0.4f);
+                shootlaser.play(0.2f);
 
                 laser.posx = character.posx + character.width;
                 laser.posy = character.posy + character.width/2;
-                laser.velx = 10;
+                laser.velx = 20;
                 renderlaser = true;
             }
 
@@ -169,12 +184,15 @@ public class TopRoom implements Screen {
 
             //Checks if character or boss die
             if(characterhealth<=0){
-                characterdeath.play(0.4f);
+                if(characterdeathplayonce) {
+                    characterdeath.play(0.4f);
+                    characterdeathplayonce = false;
+                }
             }
 
             if (bosshealth <= 0) {
                 if(bossdeathplayonce) {
-                    bossdeath.play(0.4f);
+                    bossdeath.play(0.7f);
                     bossdeathplayonce = false;
                 }
             }
@@ -191,9 +209,10 @@ public class TopRoom implements Screen {
             }
 
             //Checks collision for player against boss
-            if(!characterinvincible) {
+            //Added where this can only collide when the boss actually exists on screen (rendered)
+            if(!characterinvincible && boss.width>0) {
                 if (character.isCollide(boss)) {
-                    characterhurt.play(0.4f);
+                    characterhurt.play(0.7f);
                     characterhealth--;
                     characterinvincible = true;
                 }
@@ -201,11 +220,11 @@ public class TopRoom implements Screen {
 
             //Collision for boss against laser
             if(boss.isCollide(laser)) {
-                bosshurt.play(0.4f);
+                bosshurt.play(0.2f);
                 bosshealth--;
                 //Shrinks boss when hurt
-                boss.height--;
-                boss.width--;
+                boss.height-=5;
+                boss.width-=5;
                 //Speeds up boss when hurt
                 boss.velx++;
                 boss.vely++;
@@ -214,6 +233,15 @@ public class TopRoom implements Screen {
             //Stops rendering laser if it collides with boss by sending it off screen
             if(laser.isCollide(boss)){
                 laser.posx = MyGdxGame.SCREEN_WIDTH;
+            }
+
+
+            //This actually loops because boss.width will continue to be true
+            if(boss.width <= 0){
+                wingamemusic.play();
+                wingamemusic.setVolume(0.7f);
+                backgroundmusic.stop();
+                wongame = true;
             }
 
         }

@@ -9,8 +9,8 @@ public class Laser extends Entity {
                 new Texture("laser.png"),
                 posx,
                 posy,
-                10,
-                10,
+                75,
+                25,
                 velx,
                 vely,
                 0
