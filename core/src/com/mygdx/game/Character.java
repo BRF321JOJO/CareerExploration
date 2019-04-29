@@ -10,6 +10,8 @@ public class Character extends Entity{
     static int characterwidth = 75;
     static int characterheight = 75;
 
+    static int savedlastbutton;
+
     Character(SpriteBatch batch, int posx, int posy, int width, int height, int velx, int vely, int ID) {
         super(
                 batch,
@@ -29,17 +31,21 @@ public class Character extends Entity{
         if (ID != 2) {
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
                 posy += vely;
+                savedlastbutton = 1;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
                 posy -= vely;
+                savedlastbutton = 2;
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             posx -= velx;
+            savedlastbutton = 3;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             posx += velx;
+            savedlastbutton = 4;
         }
     }
 

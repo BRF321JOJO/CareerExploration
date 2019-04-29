@@ -110,7 +110,6 @@ public class RightRoom implements Screen {
 
     @Override
     public void dispose() {
-        RightKey.gotkey.dispose();
         deathnote.dispose();
         Clownfiesta.dispose();
         jumpsound.dispose();
