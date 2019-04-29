@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -19,7 +20,7 @@ public class MainMenu implements Screen {
     private MenuBackground menuBackground;
 
     //Music code
-    private static Music MenuMusic;
+    private Music MenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Introduction.wav"));;
 
     MainMenu(MyGdxGame game) {
         this.game = game;
@@ -34,7 +35,7 @@ public class MainMenu implements Screen {
         menuHUD = new MenuHUD(game.batch);
         menuBackground = new MenuBackground(game.batch);
 
-        MenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Introduction.wav"));
+        //MenuMusic =
     }
 
     @Override
@@ -54,7 +55,7 @@ public class MainMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Idk what this does still
-//        camera.update();
+        //camera.update();
         //Supposedly makes it so that any quality screen works
         game.batch.setProjectionMatrix(camera.combined);
 

@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class RightKey extends Entity{
 
-    private static Sound gotkey = Gdx.audio.newSound(Gdx.files.internal("Gotkey16bit.wav"));
+    private Sound gotkey = Gdx.audio.newSound(Gdx.files.internal("Gotkey16bit.wav"));
 
     private Vector2 origin;
     private Vector2 distance;
@@ -16,8 +16,8 @@ public class RightKey extends Entity{
     static boolean obtainedonce;
     static boolean obtainedkey = false;
 
-    private int songpausecounter;
-    private boolean beginpausecounter;
+    static int songpausecounter;
+    static boolean beginpausecounter;
 
     RightKey(SpriteBatch batch) {
         super(
@@ -45,16 +45,6 @@ public class RightKey extends Entity{
         Vector2 newPos = origin.add(distance);
         posx = (int)newPos.x - width/2;
         posy = (int)newPos.y - height/2;
-
-        if (beginpausecounter) {
-            RightRoom.Clownfiesta.setVolume(0.1f);
-            if (songpausecounter <= 100) {
-                songpausecounter++;
-            } else{
-                RightRoom.Clownfiesta.setVolume(0.5f);
-                beginpausecounter = false;
-            }
-        }
 
     }
 

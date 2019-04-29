@@ -1,6 +1,5 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -26,7 +25,7 @@ public class RightRoom implements Screen {
 
     private Sound deathnote = Gdx.audio.newSound(Gdx.files.internal("Deathnote.wav"));
     private Sound jumpsound = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
-    static Music Clownfiesta = Gdx.audio.newMusic(Gdx.files.internal("Clownfiesta.wav"));
+    private Music Clownfiesta = Gdx.audio.newMusic(Gdx.files.internal("Clownfiesta.wav"));
 
     RightRoom(MyGdxGame game) {
         this.game = game;
@@ -55,7 +54,7 @@ public class RightRoom implements Screen {
     public void show() {
         Clownfiesta.play();
         Clownfiesta.setLooping(true);
-        Clownfiesta.setVolume(0.5f);
+        Clownfiesta.setVolume(0.1f);
     }
 
 
@@ -154,6 +153,15 @@ public class RightRoom implements Screen {
         }
         rightKey.update(delta);
 
+        if (RightKey.beginpausecounter) {
+            Clownfiesta.setVolume(0.1f);
+            if (RightKey.songpausecounter <= 100) {
+                RightKey.songpausecounter++;
+            } else{
+                Clownfiesta.setVolume(0.5f);
+                RightKey.beginpausecounter = false;
+            }
+        }
 
         //Class specific updates
 
