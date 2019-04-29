@@ -6,9 +6,14 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class TopRoom implements Screen {
     static MyGdxGame game;
+    private OrthographicCamera camera;
+    private Viewport viewport;
 
     private Character character;
     private Boss boss;
@@ -17,34 +22,40 @@ public class TopRoom implements Screen {
     private Laser laser;
     private WinGame winGame;
 
-    private Music backgroundmusic = Gdx.audio.newMusic(Gdx.files.internal("Ashtonsong3.wav"));
+    private Music backgroundmusic = Gdx.audio.newMusic(Gdx.files.internal("Ashtonsong3.mp3"));
 
     private boolean renderspacetoshoot = true;
     private int pausecounter;
 
-    private Sound shootlaser = Gdx.audio.newSound(Gdx.files.internal("Shootlaser.wav"));
+    private Sound shootlaser = Gdx.audio.newSound(Gdx.files.internal("Shootlaser.mp3"));
 
     static boolean renderlaser = false;
-    //Currently bosshealth doesn't control anything
+    //Currently bosshealth and characterhealth don't control anything
     private int characterhealth = 10;
     private int bosshealth = 20;
 
     private boolean characterinvincible = false;
     private int invinciblecounter;
 
-    private Sound bosshurt = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
-    private Sound characterhurt = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
-    private Sound characterdeath = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
-    private Sound bossdeath = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
+    private Sound hurtsound = Gdx.audio.newSound(Gdx.files.internal("BossHurt.mp3"));
+//    private Sound bosshurt = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
+//    private Sound characterhurt = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
+//    private Sound characterdeath = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
+//    private Sound bossdeath = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
     private boolean bossdeathplayonce;
     private boolean characterdeathplayonce;
-    private Music wingamemusic = Gdx.audio.newMusic(Gdx.files.internal("happymusic.wav"));
+    private Music wingamemusic = Gdx.audio.newMusic(Gdx.files.internal("happymusic.mp3"));
 
     private boolean wongame = false;
 
+    //AssetManager manager = new AssetManager();
 
     TopRoom (MyGdxGame game) {
         this.game = game;
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT);
+        viewport = new FitViewport(MyGdxGame.SCREEN_WIDTH,MyGdxGame.SCREEN_HEIGHT, camera);
+
         topRoomBackground = new TopRoomBackground(game.batch);
         laser = new Laser(game.batch, 0, 0, 0, 0);
         character = new Character(game.batch,
@@ -75,6 +86,8 @@ public class TopRoom implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        game.batch.setProjectionMatrix(camera.combined);
+
         game.batch.begin();
 
         topRoomBackground.render();
@@ -101,6 +114,7 @@ public class TopRoom implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        viewport.update(width, height);
     }
 
     @Override
@@ -120,10 +134,10 @@ public class TopRoom implements Screen {
     public void dispose() {
         backgroundmusic.dispose();
         shootlaser.dispose();
-        bosshurt.dispose();
-        characterhurt.dispose();
-        characterdeath.dispose();
-        bossdeath.dispose();
+//        bosshurt.dispose();
+//        characterhurt.dispose();
+//        characterdeath.dispose();
+//        bossdeath.dispose();
         wingamemusic.dispose();
     }
 
@@ -185,14 +199,16 @@ public class TopRoom implements Screen {
             //Checks if character or boss die
             if(characterhealth<=0){
                 if(characterdeathplayonce) {
-                    characterdeath.play(0.4f);
+                    hurtsound.play(0.4f);
+                    //characterdeath.play(0.4f);
                     characterdeathplayonce = false;
                 }
             }
 
             if (bosshealth <= 0) {
                 if(bossdeathplayonce) {
-                    bossdeath.play(0.7f);
+                    hurtsound.play(0.4f);
+                    //bossdeath.play(0.7f);
                     bossdeathplayonce = false;
                 }
             }
@@ -212,7 +228,8 @@ public class TopRoom implements Screen {
             //Added where this can only collide when the boss actually exists on screen (rendered)
             if(!characterinvincible && boss.width>0) {
                 if (character.isCollide(boss)) {
-                    characterhurt.play(0.7f);
+                    hurtsound.play(0.7f);
+                    //characterhurt.play(0.7f);
                     characterhealth--;
                     characterinvincible = true;
                 }
@@ -220,7 +237,8 @@ public class TopRoom implements Screen {
 
             //Collision for boss against laser
             if(boss.isCollide(laser)) {
-                bosshurt.play(0.2f);
+                hurtsound.play(0.2f);
+                //bosshurt.play(0.2f);
                 bosshealth--;
                 //Shrinks boss when hurt
                 boss.height-=5;
@@ -240,6 +258,7 @@ public class TopRoom implements Screen {
             if(boss.width <= 0){
                 wingamemusic.play();
                 wingamemusic.setVolume(0.7f);
+                //manager.unload("backgroundmusic.wav");
                 backgroundmusic.stop();
                 wongame = true;
             }

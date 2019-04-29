@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class RightKey extends Entity{
 
-    private Sound gotkey = Gdx.audio.newSound(Gdx.files.internal("Gotkey16bit.wav"));
+    private Sound gotkey = Gdx.audio.newSound(Gdx.files.internal("Gotkey16bit.mp3"));
 
     private Vector2 origin;
     private Vector2 distance;

@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import sun.applet.Main;
-
 
 class MenuHUD {
     Stage stage;
@@ -22,7 +20,7 @@ class MenuHUD {
 
     private BitmapFont font = new BitmapFont();
 
-    private Sound menunavigate0 = Gdx.audio.newSound(Gdx.files.internal("menunavigate0.wav"));
+    private Sound menunavigate0 = Gdx.audio.newSound(Gdx.files.internal("menunavigate0.mp3"));
     private boolean playsoundonce = false;
     private boolean playhighscoresoundonce = false;
 

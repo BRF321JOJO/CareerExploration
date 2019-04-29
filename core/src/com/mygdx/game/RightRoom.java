@@ -23,9 +23,9 @@ public class RightRoom implements Screen {
     private boolean kaizoinvert = false;
     static int jumppresses;
 
-    private Sound deathnote = Gdx.audio.newSound(Gdx.files.internal("Deathnote.wav"));
-    private Sound jumpsound = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
-    private Music Clownfiesta = Gdx.audio.newMusic(Gdx.files.internal("Clownfiesta.wav"));
+    private Sound deathnote = Gdx.audio.newSound(Gdx.files.internal("Deathnote.mp3"));
+    private Sound jumpsound = Gdx.audio.newSound(Gdx.files.internal("jump.mp3"));
+    private Music Clownfiesta = Gdx.audio.newMusic(Gdx.files.internal("Clownfiesta.mp3"));
 
     RightRoom(MyGdxGame game) {
         this.game = game;

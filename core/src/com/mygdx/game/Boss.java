@@ -11,7 +11,7 @@ public class Boss extends Entity {
     Boss(SpriteBatch batch){
         super(
                 batch,
-                new Texture("Enemey.png"),
+                new Texture("Transparentboss.png"),
                 MyGdxGame.SCREEN_WIDTH/2 - startingwidth/2,
                 MyGdxGame.SCREEN_HEIGHT/2 - startingheight/2,
                 startingwidth,

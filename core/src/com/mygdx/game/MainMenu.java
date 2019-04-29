@@ -3,7 +3,6 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -20,7 +19,7 @@ public class MainMenu implements Screen {
     private MenuBackground menuBackground;
 
     //Music code
-    private Music MenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Introduction.wav"));;
+    private Music MenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Introduction.mp3"));
 
     MainMenu(MyGdxGame game) {
         this.game = game;
