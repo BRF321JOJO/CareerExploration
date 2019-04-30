@@ -21,6 +21,7 @@ class MenuHUD {
     private BitmapFont font = new BitmapFont();
 
     private Sound menunavigate0 = Gdx.audio.newSound(Gdx.files.internal("menunavigate0.mp3"));
+    private Sound imqazi = Gdx.audio.newSound(Gdx.files.internal("ImQazi.mp3"));
     private boolean playsoundonce = false;
     private boolean playhighscoresoundonce = false;
 
@@ -51,7 +52,7 @@ class MenuHUD {
         displayTable.setFillParent(true);
 
         StartGame = new Label("Start Game", new Label.LabelStyle(font, Color.WHITE));
-        Highscores = new Label("High Scores", new Label.LabelStyle(font, Color.WHITE));
+        Highscores = new Label("Surprise", new Label.LabelStyle(font, Color.WHITE));
 
         StartGame.setFontScale(labelstartingsize);
         Highscores.setFontScale(labelstartingsize);
@@ -90,7 +91,6 @@ class MenuHUD {
             // it will change to the next screen
             if (Gdx.input.isTouched()) {
                 MainMenu.game.setScreen(new GameScreen(MainMenu.game));
-
             }
 
         } else {
@@ -108,6 +108,11 @@ class MenuHUD {
                 menunavigate0.play(0.5f);
                 playhighscoresoundonce = true;
             }
+
+            if(Gdx.input.isTouched()){
+                imqazi.play(1f);
+            }
+
         } else {
             Highscores.setFontScale(labelstartingsize);
             playhighscoresoundonce = false;
