@@ -29,7 +29,9 @@ public class TopRoom implements Screen {
 
     private Sound shootlaser = Gdx.audio.newSound(Gdx.files.internal("Shootlaser.mp3"));
 
-    static boolean renderlaser = false;
+    private int canshootlaser = 0;
+    static boolean laserloaded;
+
     //Currently bosshealth and characterhealth don't control anything
     private int characterhealth = 10;
     private int bosshealth = 20;
@@ -48,8 +50,6 @@ public class TopRoom implements Screen {
 
     private boolean wongame = false;
 
-    private int lasershot;
-
     TopRoom (MyGdxGame game) {
         this.game = game;
         camera = new OrthographicCamera();
@@ -57,8 +57,9 @@ public class TopRoom implements Screen {
         viewport = new FitViewport(MyGdxGame.SCREEN_WIDTH,MyGdxGame.SCREEN_HEIGHT, camera);
 
         topRoomBackground = new TopRoomBackground(game.batch);
-        laser = new Laser[2];
+        laser = new Laser[3];
 
+        //Sets laser position to off screen
         for(int i = 0; i <=laser.length-1; i++) {
             laser[i] = new Laser(game.batch, MyGdxGame.SCREEN_WIDTH, 0, 0, 0);
         }
@@ -96,11 +97,13 @@ public class TopRoom implements Screen {
         game.batch.begin();
 
         topRoomBackground.render();
-        //laser only renders when shot
+
         for(int i = 0; i <=laser.length-1; i++) {
                 laser[i].render();
         }
+
         character.render();
+
         //Only renders boss if the width actually exists
         if(boss.width>0) {
             boss.render();
@@ -165,23 +168,27 @@ public class TopRoom implements Screen {
             }
 
             //Only runs when the laser is off screen, meaning can only shoot one laser at a time
-            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !renderlaser) {
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 shootlaser.play(0.2f);
 
-                if (lasershot == 0) {
+                if (laser[0].posx >= MyGdxGame.SCREEN_WIDTH && canshootlaser == 0) {
                     laser[0].posx = character.posx + character.width;
                     laser[0].posy = character.posy + character.width / 2;
                     laser[0].velx = 20;
+                    canshootlaser++;
                 }
-                if (lasershot == 1){
+                else if (laser[1].posx >= MyGdxGame.SCREEN_WIDTH && canshootlaser == 1) {
                     laser[1].posx = character.posx + character.width;
                     laser[1].posy = character.posy + character.width / 2;
                     laser[1].velx = 20;
+                    canshootlaser++;
                 }
-
-
-
-                renderlaser = true;
+                else if (laser[2].posx >= MyGdxGame.SCREEN_WIDTH && canshootlaser == 2){
+                    laser[2].posx = character.posx + character.width;
+                    laser[2].posy = character.posy + character.width / 2;
+                    laser[2].velx = 20;
+                    canshootlaser = 0;
+                }
             }
 
             //This keeps the player in bound
@@ -253,16 +260,18 @@ public class TopRoom implements Screen {
             }
 
             //Collision for boss against laser
-            if(boss.isCollide(laser[1])) {
-                hurtsound.play(0.2f);
-                //bosshurt.play(0.2f);
-                bosshealth--;
-                //Shrinks boss when hurt
-                boss.height-=5;
-                boss.width-=5;
-                //Speeds up boss when hurt
-                boss.velx++;
-                boss.vely++;
+            for(int i = 0; i<=laser.length-1; i++) {
+                if (boss.isCollide(laser[i])) {
+                    hurtsound.play(0.2f);
+                    //bosshurt.play(0.2f);
+                    bosshealth--;
+                    //Shrinks boss when hurt
+                    boss.height -= 5;
+                    boss.width -= 5;
+                    //Speeds up boss when hurt
+                    boss.velx++;
+                    boss.vely++;
+                }
             }
 
             //Stops rendering laser if it collides with boss by sending it off screen

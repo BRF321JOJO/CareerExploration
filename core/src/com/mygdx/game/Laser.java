@@ -23,7 +23,7 @@ public class Laser extends Entity {
 
         //Unrenders laser and stops its movement
         if(posx >= MyGdxGame.SCREEN_WIDTH) {
-            TopRoom.renderlaser = false;
+            velx = 0;
         }
     }
 
