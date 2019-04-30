@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Laser extends Entity {
-    Laser(SpriteBatch batch, int posx, int posy, int velx, int vely){
+    Laser(SpriteBatch batch, int posx, int posy, int velx, int vely) {
         super(batch,
                 new Texture("laser.png"),
                 posx,

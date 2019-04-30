@@ -19,7 +19,7 @@ public class TopRoom implements Screen {
     private Boss boss;
     private TopRoomBackground topRoomBackground;
     private SpacetoShoot spacetoShoot;
-    private Laser laser;
+    private Laser[] laser;
     private WinGame winGame;
 
     private Music backgroundmusic = Gdx.audio.newMusic(Gdx.files.internal("Ashtonsong3.mp3"));
@@ -48,7 +48,7 @@ public class TopRoom implements Screen {
 
     private boolean wongame = false;
 
-    //AssetManager manager = new AssetManager();
+    private int lasershot;
 
     TopRoom (MyGdxGame game) {
         this.game = game;
@@ -57,7 +57,12 @@ public class TopRoom implements Screen {
         viewport = new FitViewport(MyGdxGame.SCREEN_WIDTH,MyGdxGame.SCREEN_HEIGHT, camera);
 
         topRoomBackground = new TopRoomBackground(game.batch);
-        laser = new Laser(game.batch, 0, 0, 0, 0);
+        laser = new Laser[2];
+
+        for(int i = 0; i <=laser.length-1; i++) {
+            laser[i] = new Laser(game.batch, MyGdxGame.SCREEN_WIDTH, 0, 0, 0);
+        }
+
         character = new Character(game.batch,
                 GameScreen.savedposx,
                 150,
@@ -92,8 +97,8 @@ public class TopRoom implements Screen {
 
         topRoomBackground.render();
         //laser only renders when shot
-        if(renderlaser) {
-            laser.render();
+        for(int i = 0; i <=laser.length-1; i++) {
+                laser[i].render();
         }
         character.render();
         //Only renders boss if the width actually exists
@@ -155,15 +160,27 @@ public class TopRoom implements Screen {
             topRoomBackground.update();
             character.update();
             boss.update();
-            laser.update();
+            for(int i = 0; i <=laser.length-1; i++) {
+                laser[i].update();
+            }
 
             //Only runs when the laser is off screen, meaning can only shoot one laser at a time
-            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !renderlaser){
+            if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !renderlaser) {
                 shootlaser.play(0.2f);
 
-                laser.posx = character.posx + character.width;
-                laser.posy = character.posy + character.width/2;
-                laser.velx = 20;
+                if (lasershot == 0) {
+                    laser[0].posx = character.posx + character.width;
+                    laser[0].posy = character.posy + character.width / 2;
+                    laser[0].velx = 20;
+                }
+                if (lasershot == 1){
+                    laser[1].posx = character.posx + character.width;
+                    laser[1].posy = character.posy + character.width / 2;
+                    laser[1].velx = 20;
+                }
+
+
+
                 renderlaser = true;
             }
 
@@ -236,7 +253,7 @@ public class TopRoom implements Screen {
             }
 
             //Collision for boss against laser
-            if(boss.isCollide(laser)) {
+            if(boss.isCollide(laser[1])) {
                 hurtsound.play(0.2f);
                 //bosshurt.play(0.2f);
                 bosshealth--;
@@ -249,8 +266,10 @@ public class TopRoom implements Screen {
             }
 
             //Stops rendering laser if it collides with boss by sending it off screen
-            if(laser.isCollide(boss)){
-                laser.posx = MyGdxGame.SCREEN_WIDTH;
+            for(int i = 0; i <=laser.length-1; i++) {
+                if (laser[i].isCollide(boss)) {
+                    laser[i].posx = MyGdxGame.SCREEN_WIDTH;
+                }
             }
 
 
