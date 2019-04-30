@@ -21,7 +21,7 @@ public class Laser extends Entity {
     public void update(){
         posx += velx;
 
-        //Unrenders laser and stops its movement
+        //Stops laser movement
         if(posx >= MyGdxGame.SCREEN_WIDTH) {
             velx = 0;
         }
