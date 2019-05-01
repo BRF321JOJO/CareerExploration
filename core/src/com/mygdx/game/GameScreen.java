@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
@@ -47,6 +48,13 @@ public class GameScreen implements Screen {
         }
     }
 
+
+    void keycheat(){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.Q)){
+            RightKey.obtainedkey=true;
+            RightKey.obtainedonce = true;
+        }
+    }
 
 
     GameScreen(MyGdxGame game) {
@@ -163,6 +171,7 @@ public class GameScreen implements Screen {
     private void update(){
         character.update();
         keyWarning.update();
+        keycheat();
 
         //You will only be able to enter when you have obtained the key
         if(TopLoadingZone()){

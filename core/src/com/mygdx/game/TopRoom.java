@@ -15,9 +15,10 @@ public class TopRoom implements Screen {
     private OrthographicCamera camera;
     private Viewport viewport;
 
+    private CharacterHealth characterHealthclass;
     private Character character;
     private Boss boss;
-    private TopRoomBackground topRoomBackground;
+    private RedHealth redHealth;
     private SpacetoShoot spacetoShoot;
     private Laser[] laser;
     private WinGame winGame;
@@ -33,22 +34,26 @@ public class TopRoom implements Screen {
     private int canshootlaser = 0;
 
     //Currently bosshealth and characterhealth don't control anything
-    private int characterhealth = 10;
-    private int bosshealth = 20;
+    private int characterhealth = 9;
+    private int bosshealth = 100;
 
     private boolean characterinvincible = false;
     private int invinciblecounter;
 
     private Sound hurtsound = Gdx.audio.newSound(Gdx.files.internal("BossHurt.mp3"));
-    //    private Sound bosshurt = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
+//    private Sound bosshurt = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
 //    private Sound characterhurt = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
 //    private Sound characterdeath = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
 //    private Sound bossdeath = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
+
     private boolean bossdeathplayonce;
     private boolean characterdeathplayonce;
     private Music wingamemusic = Gdx.audio.newMusic(Gdx.files.internal("happymusic.mp3"));
 
     private boolean wongame = false;
+
+    private int bosscheckcounter;
+    private boolean userandombossvelocity = true;
 
     TopRoom(MyGdxGame game) {
         this.game = game;
@@ -56,7 +61,7 @@ public class TopRoom implements Screen {
         camera.setToOrtho(false, MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT);
         viewport = new FitViewport(MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT, camera);
 
-        topRoomBackground = new TopRoomBackground(game.batch);
+        redHealth = new RedHealth(game.batch);
         laser = new Laser[3];
 
         //Sets laser position to off screen
@@ -64,6 +69,7 @@ public class TopRoom implements Screen {
             laser[i] = new Laser(game.batch, MyGdxGame.SCREEN_WIDTH, 0, 0, 0);
         }
 
+        characterHealthclass = new CharacterHealth(game.batch);
         character = new Character(game.batch, GameScreen.savedposx, 150, 75, 75, 5, 5, 1);
         boss = new Boss(game.batch);
         spacetoShoot = new SpacetoShoot(game.batch);
@@ -81,18 +87,20 @@ public class TopRoom implements Screen {
     public void render(float delta) {
         update();
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
 
-        topRoomBackground.render();
+        redHealth.render();
 
         for (int i = 0; i <= laser.length - 1; i++) {
             laser[i].render();
         }
+
+        characterHealthclass.render();
 
         character.render();
 
@@ -152,7 +160,8 @@ public class TopRoom implements Screen {
         //All of this only happens when spacetoshoot stops rendering
         if(!renderspacetoshoot) {
 
-            topRoomBackground.update();
+            //characterHealthclass.update();
+            redHealth.update();
             character.update();
             boss.update();
             for(int i = 0; i <=laser.length-1; i++) {
@@ -248,6 +257,7 @@ public class TopRoom implements Screen {
                     //characterhurt.play(0.7f);
                     characterhealth--;
                     characterinvincible = true;
+                    redHealth.width-=80;
                 }
             }
 
@@ -255,14 +265,25 @@ public class TopRoom implements Screen {
             for(int i = 0; i<=laser.length-1; i++) {
                 if (boss.isCollide(laser[i])) {
                     hurtsound.play(0.2f);
-                    //bosshurt.play(0.2f);
+                    hurtsound.play(0.2f);
                     bosshealth--;
                     //Shrinks boss when hurt
                     boss.height -= 5;
                     boss.width -= 5;
+
                     //Speeds up boss when hurt
-                    boss.velx++;
-                    boss.vely++;
+                    if(boss.velx > 0){
+                        boss.velx++;
+                    } else if (boss.velx<0){
+                        boss.velx--;
+                    }
+
+                    if(boss.vely>0){
+                        boss.vely++;
+                    } else if(boss.vely<0){
+                        boss.vely--;
+                    }
+                    bosshealth--;
                 }
             }
 
@@ -274,13 +295,46 @@ public class TopRoom implements Screen {
             }
 
 
+            //Makes boss follow you
+            if(userandombossvelocity) {
+                userandombossvelocity = false;
+
+                //Makes boss follow player
+                if (character.posx < boss.posx) {
+                    if(boss.velx>0) {
+                        boss.velx = -boss.velx;
+                    }
+                }
+
+                if (character.posy < boss.posy) {
+                    if(boss.vely>0) {
+                        boss.vely = -boss.velx;
+                    }
+                }
+            }
+
+            if(!userandombossvelocity) {
+                if (bosscheckcounter <= 100) {
+                    bosscheckcounter++;
+                } else {
+                    userandombossvelocity = true;
+                    bosscheckcounter = 0;
+                }
+            }
+
+
+
             //This actually loops because boss.width will continue to be true
-            if(boss.width <= 0){
+            if(boss.width <= 0 || bosshealth <=0){
                 wingamemusic.play();
                 wingamemusic.setVolume(0.7f);
-                //manager.unload("backgroundmusic.wav");
                 backgroundmusic.stop();
                 wongame = true;
+                boss.width=0;
+            }
+
+            if(characterhealth==0){
+                TopRoom.game.setScreen(new GameScreen(TopRoom.game));
             }
 
         }

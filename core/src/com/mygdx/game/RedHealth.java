@@ -3,14 +3,17 @@ package com.mygdx.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class TopRoomBackground extends AbstractImage {
-    TopRoomBackground(SpriteBatch batch){
+public class RedHealth extends AbstractImage {
+
+    private static int constantheight = 100;
+
+    RedHealth(SpriteBatch batch){
         super(batch,
-                new Texture("White.png"),
+                new Texture("Health.png"),
                 0,
-                0,
-                MyGdxGame.SCREEN_WIDTH,
-                MyGdxGame.SCREEN_HEIGHT,
+                MyGdxGame.SCREEN_HEIGHT - constantheight,
+                MyGdxGame.SCREEN_WIDTH/2-40,
+                constantheight,
                 0,
                 0
         );

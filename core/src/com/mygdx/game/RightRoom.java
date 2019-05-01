@@ -27,6 +27,7 @@ public class RightRoom implements Screen {
     private Sound jumpsound = Gdx.audio.newSound(Gdx.files.internal("jump.mp3"));
     private Music Clownfiesta = Gdx.audio.newMusic(Gdx.files.internal("Clownfiesta.mp3"));
 
+
     RightRoom(MyGdxGame game) {
         this.game = game;
         camera = new OrthographicCamera();
@@ -37,10 +38,11 @@ public class RightRoom implements Screen {
 
         character = new Character(game.batch, 100, 100, 25, 26, 4, 0, 2);
 
-        platform = new Platform[3];
+        platform = new Platform[4];
         platform[0] = new Platform(game.batch,0,50,250,50,0,0);
         platform[1] = new Platform(game.batch, 350,100,300,10,3,0);
         platform[2] = new Platform(game.batch, 1000, 10, 200, 10, 0,0);
+        platform[3] = new Platform(game.batch, 1100, 100, 200, 10, 0, 3);
 
         //Makes the platforms entities
         for (int i = 0; i <= platform.length-1; i++) {
@@ -54,7 +56,7 @@ public class RightRoom implements Screen {
     public void show() {
         Clownfiesta.play();
         Clownfiesta.setLooping(true);
-        Clownfiesta.setVolume(0.1f);
+        Clownfiesta.setVolume(0.5f);
     }
 
 
@@ -80,7 +82,7 @@ public class RightRoom implements Screen {
         //This is because collecting the key will make the width 0
 
         //Also, it will only render if you haven't obtained it yet, not if you reenter room
-        if(!RightKey.obtainedonce && rightKey.width>0) {
+        if(!RightKey.obtainedonce && !RightKey.savedkey) {
             rightKey.render();
         }
 
@@ -132,6 +134,10 @@ public class RightRoom implements Screen {
             character.posy = 100;
             character.posx = 100;
             deathnote.play(0.5f);
+
+            //Loses key
+            RightKey.obtainedkey = false;
+            RightKey.obtainedonce = false;
         }
     }
 
@@ -143,6 +149,13 @@ public class RightRoom implements Screen {
         }
     }
 
+    private void platformymovement(int i, int bottombound, int topbound) {
+        if(platform[i].posy + platform[i].height <= bottombound) {
+            platform[i].vely= -platform[i].vely;
+        } else if (platform[i].posy >= topbound) {
+            platform[i].vely = -platform[i].vely;
+        }
+    }
 
     public void update(float delta) {
 
@@ -167,8 +180,10 @@ public class RightRoom implements Screen {
 
         //Makes it so platform moves at speed of its velocity
         platform[1].posx += platform[1].velx;
+        platform[3].posy += platform[3].vely;
         //Method which sets the bounds of movement
         platformxmovement(1, 250, 1000);
+        platformymovement(3, 100, 400);
 
         //Makes it so that the character is affected by gravity
         character.posy += character.vely;
@@ -205,6 +220,9 @@ public class RightRoom implements Screen {
             GameScreen.savedposy = MyGdxGame.SCREEN_HEIGHT/2-character.height/2;
             GameScreen.savedID = character.ID;
             RightRoom.game.setScreen(new GameScreen(RightRoom.game));
+
+            //This prevents losing the key when reentering room
+            RightKey.savedkey = true;
         }
 
         resetplater();
@@ -217,7 +235,8 @@ public class RightRoom implements Screen {
 
                 //These lines make it so that the character will move along with the platform
                 character.posx += platform[i].velx;
-                //character.posy += platform[i].vely;
+
+                character.posy += platform[i].vely;
 
                 character.handleCollision(platform[i]);
             }

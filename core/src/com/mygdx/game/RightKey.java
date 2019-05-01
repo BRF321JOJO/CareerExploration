@@ -19,6 +19,8 @@ public class RightKey extends Entity{
     static int songpausecounter;
     static boolean beginpausecounter;
 
+    static boolean savedkey;
+
     RightKey(SpriteBatch batch) {
         super(
                 batch,
@@ -54,7 +56,7 @@ public class RightKey extends Entity{
 
     public void handleCollision(Entity e) {
         //Plays sound if touch key, but only once
-        if (!obtainedonce) {
+        if (!obtainedonce&&!savedkey) {
             gotkey.play(0.5f);
             obtainedonce = true;
 
@@ -64,7 +66,7 @@ public class RightKey extends Entity{
         }
         //This makes it so the key disappears when you touch it.
         //It is still technically there, you just can't interact with it
-        width=0;
+        //width=0;
 
         obtainedkey = true;
 
