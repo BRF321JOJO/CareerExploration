@@ -216,13 +216,16 @@ public class RightRoom implements Screen {
         if (character.posy >= 50 && character.posy <= 100 && character.posx < 50) {
             //Subtract 50 so that they do not collide
             //Idk why
-            GameScreen.savedposx = MyGdxGame.SCREEN_WIDTH - character.width - GameScreen.rightloadwidth-50;
-            GameScreen.savedposy = MyGdxGame.SCREEN_HEIGHT/2-character.height/2;
-            GameScreen.savedID = character.ID;
-            RightRoom.game.setScreen(new GameScreen(RightRoom.game));
+            MainRoom.savedposx = MyGdxGame.SCREEN_WIDTH - character.width - MainRoom.rightloadwidth-50;
+            MainRoom.savedposy = MyGdxGame.SCREEN_HEIGHT/2-character.height/2;
+            MainRoom.savedID = character.ID;
+            RightRoom.game.setScreen(new MainRoom(RightRoom.game));
 
             //This prevents losing the key when reentering room
-            RightKey.savedkey = true;
+            if(RightKey.obtainedkey) {
+                RightKey.savedkey = true;
+                RightKey.obtainedonce = true;
+            }
         }
 
         resetplater();

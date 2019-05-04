@@ -34,7 +34,7 @@ public class TopRoom implements Screen {
     private int canshootlaser = 0;
 
     //Currently bosshealth and characterhealth don't control anything
-    private int characterhealth = 9;
+    private int characterhealth = 13;
     private int bosshealth = 100;
 
     private boolean characterinvincible = false;
@@ -62,6 +62,7 @@ public class TopRoom implements Screen {
         viewport = new FitViewport(MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT, camera);
 
         redHealth = new RedHealth(game.batch);
+        characterHealthclass = new CharacterHealth(game.batch);
         laser = new Laser[3];
 
         //Sets laser position to off screen
@@ -69,8 +70,7 @@ public class TopRoom implements Screen {
             laser[i] = new Laser(game.batch, MyGdxGame.SCREEN_WIDTH, 0, 0, 0);
         }
 
-        characterHealthclass = new CharacterHealth(game.batch);
-        character = new Character(game.batch, GameScreen.savedposx, 150, 75, 75, 5, 5, 1);
+        character = new Character(game.batch, MainRoom.savedposx, 150, 75, 75, 5, 5, 1);
         boss = new Boss(game.batch);
         spacetoShoot = new SpacetoShoot(game.batch);
         winGame = new WinGame(game.batch);
@@ -95,12 +95,11 @@ public class TopRoom implements Screen {
         game.batch.begin();
 
         redHealth.render();
+        characterHealthclass.render();
 
         for (int i = 0; i <= laser.length - 1; i++) {
             laser[i].render();
         }
-
-        characterHealthclass.render();
 
         character.render();
 
@@ -116,7 +115,6 @@ public class TopRoom implements Screen {
         if (wongame) {
             winGame.render();
         }
-
         game.batch.end();
     }
 
@@ -257,7 +255,7 @@ public class TopRoom implements Screen {
                     //characterhurt.play(0.7f);
                     characterhealth--;
                     characterinvincible = true;
-                    redHealth.width-=80;
+                    redHealth.width-=40;
                 }
             }
 
@@ -334,7 +332,7 @@ public class TopRoom implements Screen {
             }
 
             if(characterhealth==0){
-                TopRoom.game.setScreen(new GameScreen(TopRoom.game));
+                TopRoom.game.setScreen(new MainRoom(TopRoom.game));
             }
 
         }

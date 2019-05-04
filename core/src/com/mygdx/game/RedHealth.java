@@ -5,14 +5,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class RedHealth extends AbstractImage {
 
-    private static int constantheight = 100;
+    private static int constantheight = 203;
 
     RedHealth(SpriteBatch batch){
         super(batch,
                 new Texture("Health.png"),
                 0,
                 MyGdxGame.SCREEN_HEIGHT - constantheight,
-                MyGdxGame.SCREEN_WIDTH/2-40,
+                757-40,
                 constantheight,
                 0,
                 0

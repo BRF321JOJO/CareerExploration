@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class GameScreen implements Screen {
+public class MainRoom implements Screen {
 
     static MyGdxGame game;
     private OrthographicCamera camera;
@@ -32,9 +32,9 @@ public class GameScreen implements Screen {
     static int savedID;
 
     static int rightloadwidth = 100;
-    static int rightloadheight = 300;
-    static int toploadheight = 100;
-    static int toploadwidth = 300;
+    private static int rightloadheight = 300;
+    private static int toploadheight = 100;
+    private static int toploadwidth = 300;
 
     private boolean renderkey;
 
@@ -49,7 +49,7 @@ public class GameScreen implements Screen {
     }
 
 
-    void keycheat(){
+    private void keycheat(){
         if(Gdx.input.isKeyJustPressed(Input.Keys.Q)){
             RightKey.obtainedkey=true;
             RightKey.obtainedonce = true;
@@ -57,7 +57,7 @@ public class GameScreen implements Screen {
     }
 
 
-    GameScreen(MyGdxGame game) {
+    MainRoom(MyGdxGame game) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT);
@@ -156,13 +156,13 @@ public class GameScreen implements Screen {
         ambientMusic.dispose();
     }
 
-    boolean TopLoadingZone() {
+    private boolean TopLoadingZone() {
         return character.posx >= MyGdxGame.SCREEN_WIDTH/2 - character.width - toploadwidth/2
                 && character.posx <= MyGdxGame.SCREEN_WIDTH/2 + toploadwidth/2
                 && character.posy >= MyGdxGame.SCREEN_HEIGHT - character.height - toploadheight;
     }
 
-    boolean RightLoadingZone(){
+    private boolean RightLoadingZone(){
         return character.posy >= MyGdxGame.SCREEN_HEIGHT/2 - character.height - rightloadheight/2
                 && character.posy <= MyGdxGame.SCREEN_HEIGHT/2 + rightloadheight/2
                 && character.posx >= MyGdxGame.SCREEN_WIDTH - character.width - rightloadwidth;
@@ -177,7 +177,7 @@ public class GameScreen implements Screen {
         if(TopLoadingZone()){
             if(RightKey.obtainedkey) {
                 savedposx = character.posx;
-                GameScreen.game.setScreen(new TopRoom(GameScreen.game));
+                MainRoom.game.setScreen(new TopRoom(MainRoom.game));
             } else {
                 //This code runs if you didn't get the key, renders the key warning
                 renderkey = true;
@@ -189,7 +189,7 @@ public class GameScreen implements Screen {
 
         if (RightLoadingZone()) {
             savedposy = character.posy;
-            GameScreen.game.setScreen(new RightRoom(GameScreen.game));
+            MainRoom.game.setScreen(new RightRoom(MainRoom.game));
         }
 
 

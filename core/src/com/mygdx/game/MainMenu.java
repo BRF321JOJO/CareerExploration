@@ -16,7 +16,7 @@ public class MainMenu implements Screen {
     private Viewport viewport;
 
     private MenuHUD menuHUD;
-    private MenuBackground menuBackground;
+    //private MenuBackground menuBackground;
 
     //Music code
     private Music MenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Introduction.mp3"));
@@ -32,7 +32,7 @@ public class MainMenu implements Screen {
         viewport = new FitViewport(MyGdxGame.SCREEN_WIDTH,MyGdxGame.SCREEN_HEIGHT, camera);
 
         menuHUD = new MenuHUD(game.batch);
-        menuBackground = new MenuBackground(game.batch);
+        //menuBackground = new MenuBackground(game.batch);
 
         //MenuMusic =
     }

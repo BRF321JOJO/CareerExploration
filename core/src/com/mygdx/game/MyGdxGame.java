@@ -18,7 +18,7 @@ public class MyGdxGame extends Game {
         //This sets the scale of the font
         font.getData().setScale(4f);
 
-        this.setScreen(new RightRoom(this));
+        this.setScreen(new TopRoom(this));
     }
 
     public void render() {

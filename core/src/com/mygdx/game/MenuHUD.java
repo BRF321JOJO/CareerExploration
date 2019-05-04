@@ -90,7 +90,7 @@ class MenuHUD {
             //This line of code makes it so that if you click in this area
             // it will change to the next screen
             if (Gdx.input.isTouched()) {
-                MainMenu.game.setScreen(new GameScreen(MainMenu.game));
+                MainMenu.game.setScreen(new MainRoom(MainMenu.game));
             }
 
         } else {
