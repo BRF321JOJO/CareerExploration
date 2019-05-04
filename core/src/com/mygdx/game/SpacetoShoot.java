@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class SpacetoShoot extends AbstractImage {
 
+    static boolean renderspacetoshoot = true;
+    private static int pausecounter;
+
     SpacetoShoot(SpriteBatch batch){
         super(
                 batch,
@@ -19,7 +22,11 @@ public class SpacetoShoot extends AbstractImage {
     }
 
     public void update(){
-
+        if (pausecounter <= 100) {
+            pausecounter++;
+        } else{
+            renderspacetoshoot = false;
+        }
     }
 
     public void render(){

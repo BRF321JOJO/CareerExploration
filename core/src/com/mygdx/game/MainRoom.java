@@ -18,24 +18,20 @@ public class MainRoom implements Screen {
 
     private MainRoomBackground mainRoomBackground;
     private Controlsimage controlsimage;
-    private Character character;
     private KeyWarning keyWarning;
-
     private LoadingZone[] loadingZone;
+    private Character character;
 
-    private Music ambientMusic;
+    private Music ambientMusic = Gdx.audio.newMusic(Gdx.files.internal("bossfight.mp3"));;
 
     //This starts at this point and is later dependent upon the saved position
     static int savedposx;
     static int savedposy;
-
     static int savedID;
-
     static int rightloadwidth = 100;
     private static int rightloadheight = 300;
     private static int toploadheight = 100;
     private static int toploadwidth = 300;
-
     private boolean renderkey;
 
 
@@ -52,7 +48,7 @@ public class MainRoom implements Screen {
     private void keycheat(){
         if(Gdx.input.isKeyJustPressed(Input.Keys.Q)){
             RightKey.obtainedkey=true;
-            RightKey.obtainedonce = true;
+            RightKey.obtainedonce=true;
         }
     }
 
@@ -63,8 +59,10 @@ public class MainRoom implements Screen {
         camera.setToOrtho(false, MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT);
         viewport = new FitViewport(MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT, camera);
 
-        mainRoomBackground = new MainRoomBackground(game.batch);
 
+        mainRoomBackground = new MainRoomBackground(game.batch);
+        controlsimage = new Controlsimage(game.batch);
+        keyWarning = new KeyWarning(game.batch);
         loadingZone = new LoadingZone[2];
 
         loadingZone[0] = new LoadingZone(game.batch ,
@@ -83,18 +81,12 @@ public class MainRoom implements Screen {
                 MyGdxGame.SCREEN_HEIGHT - toploadheight
         );
 
-        controlsimage = new Controlsimage(game.batch);
 
+        //Here so that the character will spawn in at the appropriote position
         checkposition();
-
         character = new Character(game.batch, savedposx, savedposy, 75, 75, 7, 7, 0);
 
-
-        keyWarning = new KeyWarning(game.batch);
-
-
-        ambientMusic = Gdx.audio.newMusic(Gdx.files.internal("bossfight.mp3"));
-        }
+    }
 
     @Override
     public void show() {
@@ -107,30 +99,26 @@ public class MainRoom implements Screen {
     public void render(float delta) {
         //This runs update method at bottom of class
         update();
-
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 //        camera.update();
         game.batch.setProjectionMatrix(camera.combined);
+
 
         game.batch.begin();
 
         mainRoomBackground.render();
-
-        for(int i=0; i<=loadingZone.length-1; i++) {
-            loadingZone[i].render();
-        }
-
         controlsimage.render();
-        character.render();
-
         //Only renders if within area for rendering
         if(renderkey) {
             keyWarning.render();
         }
-        game.batch.end();
+        for(int i=0; i<=loadingZone.length-1; i++) {
+            loadingZone[i].render();
+        }
+        character.render();
 
+        game.batch.end();
     }
 
     @Override
@@ -169,8 +157,9 @@ public class MainRoom implements Screen {
     }
 
     private void update(){
-        character.update();
         keyWarning.update();
+        character.update();
+
         keycheat();
 
         //You will only be able to enter when you have obtained the key
@@ -192,37 +181,6 @@ public class MainRoom implements Screen {
             MainRoom.game.setScreen(new RightRoom(MainRoom.game));
         }
 
-
-        //This keeps the player in bound
-        if(character.posx<0){
-            character.velx = 0;
-            character.posx = 0;
-        } else{
-            character.velx = 7;
-        }
-        if(character.posy<0) {
-            character.vely = 0;
-            character.posy = 0;
-        } else{
-            character.vely = 7;
-        }
-
-        if(character.posx > MyGdxGame.SCREEN_WIDTH - character.width){
-            character.velx = 0;
-            character.posx = MyGdxGame.SCREEN_WIDTH - character.width;
-        } else{
-            character.velx = 7;
-        }
-
-        if(character.posy > MyGdxGame.SCREEN_HEIGHT - character.height){
-            character.vely = 0;
-            character.posy = MyGdxGame.SCREEN_HEIGHT - character.height;
-        } else{
-            character.vely = 7;
-        }
-
-
-
 //        for (Entity e : Entity.entities) {
 //            //Checks collision for player specifically
 //            if (character.isCollide(e)) {
@@ -230,9 +188,7 @@ public class MainRoom implements Screen {
 //                character.handleCollision(e);
 //                e.handleCollision(character);
 //            }
-//
-//            //Can add more here
-//
+
 //        }
 
     }

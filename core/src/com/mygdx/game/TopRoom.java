@@ -15,61 +15,56 @@ public class TopRoom implements Screen {
     private OrthographicCamera camera;
     private Viewport viewport;
 
+    //These fields create the Objects
+    //In order of rendering
+    private RedHealth redHealth;
     private CharacterHealth characterHealthclass;
+    private BossHealth bossHealthclass;
+    private Laser[] laser;
     private Character character;
     private Boss boss;
-    private RedHealth redHealth;
     private SpacetoShoot spacetoShoot;
-    private Laser[] laser;
     private WinGame winGame;
 
+    //These fields create music/sounds
     private Music backgroundmusic = Gdx.audio.newMusic(Gdx.files.internal("Ashtonsong3.mp3"));
-
-    private boolean renderspacetoshoot = true;
-
-    private int pausecounter;
-
     private Sound shootlaser = Gdx.audio.newSound(Gdx.files.internal("Shootlaser.mp3"));
-
-    private int canshootlaser = 0;
-
-    //Currently bosshealth and characterhealth don't control anything
-    private int characterhealth = 13;
-    private int bosshealth = 100;
-
-    private boolean characterinvincible = false;
-    private int invinciblecounter;
-
     private Sound hurtsound = Gdx.audio.newSound(Gdx.files.internal("BossHurt.mp3"));
 //    private Sound bosshurt = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
 //    private Sound characterhurt = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
 //    private Sound characterdeath = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
 //    private Sound bossdeath = Gdx.audio.newSound(Gdx.files.internal("Bosshurt.wav"));
-
-    private boolean bossdeathplayonce;
-    private boolean characterdeathplayonce;
     private Music wingamemusic = Gdx.audio.newMusic(Gdx.files.internal("happymusic.mp3"));
 
-    private boolean wongame = false;
 
+    //These fields are normal fields
+    private int canshootlaser = 0;
+    private int characterhealth = 13;
+    private int bosshealth = 100;
+    private boolean characterinvincible = false;
+    private int invinciblecounter;
+    private boolean bossdeathplayonce;
+    private boolean characterdeathplayonce;
+    private boolean wongame = false;
     private int bosscheckcounter;
     private boolean userandombossvelocity = true;
 
     TopRoom(MyGdxGame game) {
+        //These set up the world
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT);
         viewport = new FitViewport(MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT, camera);
 
+        //These construct the game (in order of rendering)
         redHealth = new RedHealth(game.batch);
         characterHealthclass = new CharacterHealth(game.batch);
+        bossHealthclass = new BossHealth(game.batch);
         laser = new Laser[3];
-
         //Sets laser position to off screen
         for (int i = 0; i <= laser.length - 1; i++) {
             laser[i] = new Laser(game.batch, MyGdxGame.SCREEN_WIDTH, 0, 0, 0);
         }
-
         character = new Character(game.batch, MainRoom.savedposx, 150, 75, 75, 5, 5, 1);
         boss = new Boss(game.batch);
         spacetoShoot = new SpacetoShoot(game.batch);
@@ -86,16 +81,15 @@ public class TopRoom implements Screen {
     @Override
     public void render(float delta) {
         update();
-
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         game.batch.setProjectionMatrix(camera.combined);
 
-        game.batch.begin();
 
+        game.batch.begin();
         redHealth.render();
         characterHealthclass.render();
+        bossHealthclass.render();
 
         for (int i = 0; i <= laser.length - 1; i++) {
             laser[i].render();
@@ -107,11 +101,9 @@ public class TopRoom implements Screen {
         if (boss.width > 0) {
             boss.render();
         }
-
-        if (renderspacetoshoot) {
+        if (SpacetoShoot.renderspacetoshoot) {
             spacetoShoot.render();
         }
-
         if (wongame) {
             winGame.render();
         }
@@ -140,31 +132,31 @@ public class TopRoom implements Screen {
     public void dispose() {
         backgroundmusic.dispose();
         shootlaser.dispose();
+
+        hurtsound.dispose();
 //        bosshurt.dispose();
 //        characterhurt.dispose();
 //        characterdeath.dispose();
 //        bossdeath.dispose();
+
         wingamemusic.dispose();
     }
 
     private void update(){
 
-        if (pausecounter <= 100) {
-            pausecounter++;
-        } else{
-            renderspacetoshoot = false;
-        }
+       spacetoShoot.update();
 
         //All of this only happens when spacetoshoot stops rendering
-        if(!renderspacetoshoot) {
+        if(!SpacetoShoot.renderspacetoshoot) {
 
-            //characterHealthclass.update();
+            //These update the game based on the classes
             redHealth.update();
-            character.update();
-            boss.update();
             for(int i = 0; i <=laser.length-1; i++) {
                 laser[i].update();
             }
+            character.update();
+            boss.update();
+
             //Only runs when the laser is off screen, meaning can only shoot one laser at a time
             if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 if (laser[0].posx >= MyGdxGame.SCREEN_WIDTH && canshootlaser == 0) {
@@ -188,34 +180,6 @@ public class TopRoom implements Screen {
                     laser[2].velx = 20;
                     canshootlaser = 0;
                 }
-            }
-
-            //This keeps the player in bound
-            if (character.posx < 0) {
-                character.velx = 0;
-                character.posx = 0;
-            } else {
-                character.velx = 7;
-            }
-            if (character.posy < 0) {
-                character.vely = 0;
-                character.posy = 0;
-            } else {
-                character.vely = 7;
-            }
-
-            if (character.posx > MyGdxGame.SCREEN_WIDTH - character.width) {
-                character.velx = 0;
-                character.posx = MyGdxGame.SCREEN_WIDTH - character.width;
-            } else {
-                character.velx = 7;
-            }
-
-            if (character.posy > MyGdxGame.SCREEN_HEIGHT - character.height) {
-                character.vely = 0;
-                character.posy = MyGdxGame.SCREEN_HEIGHT - character.height;
-            } else {
-                character.vely = 7;
             }
 
 

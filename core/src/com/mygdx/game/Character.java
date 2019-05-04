@@ -47,6 +47,37 @@ public class Character extends Entity{
             posx += velx;
             savedlastbutton = 4;
         }
+
+        //This keeps the player in bound
+        //Currently only applied to anything but right room
+        if(ID!=2) {
+            if (posx < 0) {
+                velx = 0;
+                posx = 0;
+            } else {
+                velx = 7;
+            }
+            if (posy < 0) {
+                vely = 0;
+                posy = 0;
+            } else {
+                vely = 7;
+            }
+
+            if (posx > MyGdxGame.SCREEN_WIDTH - width) {
+                velx = 0;
+                posx = MyGdxGame.SCREEN_WIDTH - width;
+            } else {
+                velx = 7;
+            }
+
+            if (posy > MyGdxGame.SCREEN_HEIGHT - height) {
+                vely = 0;
+                posy = MyGdxGame.SCREEN_HEIGHT - height;
+            } else {
+                vely = 7;
+            }
+        }
     }
 
 

@@ -15,8 +15,8 @@ public class MainMenu implements Screen {
     private OrthographicCamera camera;
     private Viewport viewport;
 
-    private MenuHUD menuHUD;
     //private MenuBackground menuBackground;
+    private MenuHUD menuHUD;
 
     //Music code
     private Music MenuMusic = Gdx.audio.newMusic(Gdx.files.internal("Introduction.mp3"));
