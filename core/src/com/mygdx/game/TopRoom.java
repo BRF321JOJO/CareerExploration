@@ -17,7 +17,7 @@ public class TopRoom implements Screen {
 
     //These fields create the Objects
     //In order of rendering
-    private RedHealth redHealth;
+    private RedHealth[] redHealth;
     private CharacterHealth characterHealthclass;
     private BossHealth bossHealthclass;
     private Laser[] laser;
@@ -40,7 +40,7 @@ public class TopRoom implements Screen {
     //These fields are normal fields
     private int canshootlaser = 0;
     private int characterhealth = 13;
-    private int bosshealth = 100;
+    private int bosshealth = 96;
     private boolean characterinvincible = false;
     private int invinciblecounter;
     private boolean bossdeathplayonce;
@@ -48,6 +48,7 @@ public class TopRoom implements Screen {
     private boolean wongame = false;
     private int bosscheckcounter;
     private boolean userandombossvelocity = true;
+    private int laservelocity = 40;
 
     TopRoom(MyGdxGame game) {
         //These set up the world
@@ -57,7 +58,10 @@ public class TopRoom implements Screen {
         viewport = new FitViewport(MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT, camera);
 
         //These construct the game (in order of rendering)
-        redHealth = new RedHealth(game.batch);
+        redHealth = new RedHealth[2];
+        redHealth[0] = new RedHealth(game.batch, 0, 757-40);
+        redHealth[1] = new RedHealth(game.batch, MyGdxGame.SCREEN_WIDTH-BossHealth.constantwidth, 757-90);
+
         characterHealthclass = new CharacterHealth(game.batch);
         bossHealthclass = new BossHealth(game.batch);
         laser = new Laser[3];
@@ -87,7 +91,9 @@ public class TopRoom implements Screen {
 
 
         game.batch.begin();
-        redHealth.render();
+        for(int i = 0; i<= redHealth.length-1;i++) {
+            redHealth[i].render();
+        }
         characterHealthclass.render();
         bossHealthclass.render();
 
@@ -150,7 +156,9 @@ public class TopRoom implements Screen {
         if(!SpacetoShoot.renderspacetoshoot) {
 
             //These update the game based on the classes
-            redHealth.update();
+            for(int i = 0; i<= redHealth.length-1;i++) {
+                redHealth[i].update();
+            }
             for(int i = 0; i <=laser.length-1; i++) {
                 laser[i].update();
             }
@@ -163,21 +171,21 @@ public class TopRoom implements Screen {
                     shootlaser.play(0.2f);
                     laser[0].posx = character.posx + character.width;
                     laser[0].posy = character.posy + character.width / 2;
-                    laser[0].velx = 20;
+                    laser[0].velx = laservelocity;
                     canshootlaser++;
                 }
                 else if (laser[1].posx >= MyGdxGame.SCREEN_WIDTH && canshootlaser == 1) {
                     shootlaser.play(0.2f);
                     laser[1].posx = character.posx + character.width;
                     laser[1].posy = character.posy + character.width / 2;
-                    laser[1].velx = 20;
+                    laser[1].velx = laservelocity;
                     canshootlaser++;
                 }
                 else if (laser[2].posx >= MyGdxGame.SCREEN_WIDTH && canshootlaser == 2){
                     shootlaser.play(0.2f);
                     laser[2].posx = character.posx + character.width;
                     laser[2].posy = character.posy + character.width / 2;
-                    laser[2].velx = 20;
+                    laser[2].velx = laservelocity;
                     canshootlaser = 0;
                 }
             }
@@ -219,7 +227,7 @@ public class TopRoom implements Screen {
                     //characterhurt.play(0.7f);
                     characterhealth--;
                     characterinvincible = true;
-                    redHealth.width-=40;
+                    redHealth[0].width -= 40;
                 }
             }
 
@@ -246,6 +254,7 @@ public class TopRoom implements Screen {
                         boss.vely--;
                     }
                     bosshealth--;
+                    redHealth[1].width -= 8;
                 }
             }
 

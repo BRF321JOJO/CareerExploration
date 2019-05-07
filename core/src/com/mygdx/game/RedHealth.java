@@ -7,12 +7,12 @@ public class RedHealth extends AbstractImage {
 
     private static int constantheight = 203;
 
-    RedHealth(SpriteBatch batch){
+    RedHealth(SpriteBatch batch, int posx, int width){
         super(batch,
                 new Texture("Health.png"),
-                0,
+                posx,
                 MyGdxGame.SCREEN_HEIGHT - constantheight,
-                757-40,
+                width,
                 constantheight,
                 0,
                 0

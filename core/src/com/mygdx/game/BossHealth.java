@@ -5,13 +5,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class BossHealth extends AbstractImage {
 
-    private static int constantwidth = 757;
+    static int constantwidth = 757;
     private static int constantheight = 203;
 
     public BossHealth(SpriteBatch batch) {
         super(
                 batch,
-                new Texture("BossHealthImage.png"),
+                new Texture("Bosshealth.png"),
                 MyGdxGame.SCREEN_WIDTH-constantwidth,
                 MyGdxGame.SCREEN_HEIGHT-constantheight,
                 constantwidth,
