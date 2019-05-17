@@ -159,6 +159,12 @@ public class RightRoom implements Screen {
 
     public void update(float delta) {
 
+
+        //Debug which reports back position of click
+        if(Gdx.input.isTouched()){
+            System.out.println("x" + Gdx.input.getX() + " y" + Gdx.input.getY());
+        }
+
         //Update methods
         character.update();
         for(int i = 0; i <= platform.length-1; i++) {

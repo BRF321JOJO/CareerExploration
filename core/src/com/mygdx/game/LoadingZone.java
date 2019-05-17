@@ -19,6 +19,11 @@ public class LoadingZone extends Entity {
         );
     }
 
+    void update(){
+
+    }
+
+
     public void render(){
         batch.draw(texture, posx, posy, width, height);
     }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -23,6 +24,8 @@ public class MainRoom implements Screen {
     private Character character;
 
     private Music ambientMusic = Gdx.audio.newMusic(Gdx.files.internal("bossfight.mp3"));;
+
+    private Pixmap curserfont = new Pixmap(Gdx.files.internal("Cursor.png"));
 
     //This starts at this point and is later dependent upon the saved position
     static int savedposx;
@@ -59,6 +62,8 @@ public class MainRoom implements Screen {
         camera.setToOrtho(false, MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT);
         viewport = new FitViewport(MyGdxGame.SCREEN_WIDTH, MyGdxGame.SCREEN_HEIGHT, camera);
 
+        //Sets curser things
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(curserfont, 0, 0));
 
         mainRoomBackground = new MainRoomBackground(game.batch);
         controlsimage = new Controlsimage(game.batch);
@@ -142,6 +147,7 @@ public class MainRoom implements Screen {
     @Override
     public void dispose() {
         ambientMusic.dispose();
+        curserfont.dispose();
     }
 
     private boolean TopLoadingZone() {
