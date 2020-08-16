@@ -1,4 +1,4 @@
-# CareerExploration
+# Roomz
 A game for my high school project
 
 Attribution:  
